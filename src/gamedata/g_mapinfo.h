@@ -43,6 +43,7 @@
 #include "hw_viewpointuniforms.h"
 #include "vm.h"
 #include "maps.h"
+#include "doomdef.h"
 
 struct level_info_t;
 struct cluster_info_t;
@@ -364,8 +365,10 @@ struct level_info_t
 	double		aircontrol;
 	int			WarpTrans;
 	int			airsupply;
-	uint32_t	compatflags, compatflags2;
-	uint32_t	compatmask, compatmask2;
+	ELevelCompatFlags	compatflags;
+	ELevelCompatFlags2  compatflags2;
+	ELevelCompatFlags	compatmask;
+	ELevelCompatFlags2	compatmask2;
 	FString		Translator;	// for converting Doom-format linedef and sector types.
 	int			DefaultEnvironment;	// Default sound environment for the map.
 	FName		Intermission;
