@@ -38,6 +38,7 @@
 #include "c_cvars.h"
 #include "cmdlib.h"
 #include "d_main.h"
+#include "d_steam.h"
 #include "engineerrors.h"
 #include "filesystem.h"
 #include "findfile.h"
@@ -94,7 +95,7 @@ void FIWadManager::ParseIWadInfo(const char *fn, const char *data, int datasize,
 				// Skip the rest.
 				break;
 			}
-				
+
 			FIWADInfo *iwad = result ? result : &mIWadInfos[mIWadInfos.Reserve(1)];
 			sc.MustGetStringName("{");
 			while (!sc.CheckString("}"))
@@ -484,7 +485,7 @@ void FIWadManager::CollectSearchPaths()
 		}
 	}
 	mSearchPaths.Append(I_GetGogPaths());
-	mSearchPaths.Append(I_GetSteamPath());
+	mSearchPaths.Append(D_GetSteamGamePaths());
 	mSearchPaths.Append(I_GetBethesdaPath());
 
 	// Unify and remove trailing slashes
