@@ -66,6 +66,9 @@ CVAR(Bool, i_loadsupportwad, true, CVAR_ARCHIVE|CVAR_GLOBALCONFIG) // Disabled i
 CVAR(Bool, i_is_new_release, true, 0)
 CVAR(Int, i_display_new_release, 1, CVAR_ARCHIVE|CVAR_GLOBALCONFIG) // 0:no, 1: yes, 2: always for testing
 
+// Search game distributors' (Steam, GOG, Bethesda) paths for installed IWADs
+CVAR(Bool, i_searchdistributors, true, CVAR_ARCHIVE|CVAR_GLOBALCONFIG)
+
 EXTERN_FARG(iwad);
 EXTERN_FARG(host);
 EXTERN_FARG(join);
@@ -484,9 +487,13 @@ void FIWadManager::CollectSearchPaths()
 			}
 		}
 	}
-	mSearchPaths.Append(I_GetGogPaths());
-	mSearchPaths.Append(D_GetSteamGamePaths());
-	mSearchPaths.Append(I_GetBethesdaPath());
+
+	if (i_searchdistributors)
+	{
+		mSearchPaths.Append(I_GetGogPaths());
+		mSearchPaths.Append(D_GetSteamGamePaths());
+		mSearchPaths.Append(I_GetBethesdaPath());
+	}
 
 	// Unify and remove trailing slashes
 	for (auto &str : mSearchPaths)
