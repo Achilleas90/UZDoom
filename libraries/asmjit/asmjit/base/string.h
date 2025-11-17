@@ -252,16 +252,9 @@ public:
 
 //! Temporary string builder, has statically allocated `N` bytes.
 template<size_t N>
-class StringBuilderTmp : public StringBuilder
-{
-  private:
-	  //temp fix to allow c++20 to compile. Manually expanded this macro
-	  //and fixed syntax GCC would not accept. 
-	StringBuilderTmp(StringBuilderTmp<N> &other)            = delete;
-	StringBuilderTmp& operator=(StringBuilderTmp<N> &other) = delete;
-	StringBuilderTmp(StringBuilderTmp<N> &&other)           = delete;
-
-  public:
+class StringBuilderTmp : public StringBuilder {
+public:
+  ASMJIT_NONCOPYABLE(StringBuilderTmp<N>)
 
   // --------------------------------------------------------------------------
   // [Construction / Destruction]
