@@ -466,7 +466,12 @@ class ZoneHeap {
 template <typename T>
 class ZoneList {
 public:
-  ASMJIT_NONCOPYABLE(ZoneList<T>)
+  private:
+	ZoneList(ZoneList<T> &other)            = delete;
+	ZoneList& operator=(ZoneList<T> &other) = delete;
+	ZoneList(ZoneList<T> &&other)           = delete;
+
+  public:
 
   // --------------------------------------------------------------------------
   // [Link]
@@ -647,8 +652,12 @@ public:
 //! - Uses ZoneHeap, thus small vectors are basically for free.
 template <typename T>
 class ZoneVector : public ZoneVectorBase {
-public:
-  ASMJIT_NONCOPYABLE(ZoneVector<T>)
+  private:
+	ZoneVector(ZoneVector<T> &other)            = delete;
+	ZoneVector &operator=(ZoneVector<T> &other) = delete;
+	ZoneVector(ZoneVector<T> &&other)           = delete;
+
+  public:
 
   // --------------------------------------------------------------------------
   // [Construction / Destruction]
