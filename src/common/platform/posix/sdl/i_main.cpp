@@ -26,10 +26,12 @@
 
 #include <SDL2/SDL.h>
 #include <csignal>
+#include <fcntl.h>
 #include <locale.h>
 #include <new>
 #include <signal.h>
 #include <sys/param.h>
+#include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/utsname.h>
 #include <unistd.h>
@@ -59,6 +61,8 @@ void Mac_I_FatalError(const char* errortext);
 #ifdef __linux__
 void Linux_I_FatalError(const char* errortext);
 #endif
+
+bool SDL_I_CheckForRestart(void);
 
 // PUBLIC FUNCTION PROTOTYPES ----------------------------------------------
 int GameMain();
@@ -196,6 +200,12 @@ int main (int argc, char **argv)
 	I_StartupJoysticks();
 
 	const int result = GameMain();
+
+	if (SDL_I_CheckForRestart())
+	{
+		int self_file = open("/proc/self/exe", O_RDONLY);
+		fexecve(self_file, argv, environ);
+	}
 
 	SDL_Quit();
 
