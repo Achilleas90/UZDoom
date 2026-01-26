@@ -60,7 +60,22 @@ void Mac_I_FatalError(const char* errortext);
 
 #ifdef __linux__
 void Linux_I_FatalError(const char* errortext);
+
+static void Linux_I_TryRestart(char **argv)
+{
+	int self_file = open("/proc/self/exe", O_RDONLY);
+	fexecve(self_file, argv, environ);
+}
 #endif
+
+static void I_TryRestart(char **argv)
+{
+	// TODO: Mac support
+
+#ifdef __linux__
+	Linux_I_TryRestart(argv);
+#endif
+}
 
 bool SDL_I_CheckForRestart(void);
 
@@ -203,8 +218,7 @@ int main (int argc, char **argv)
 
 	if (SDL_I_CheckForRestart())
 	{
-		int self_file = open("/proc/self/exe", O_RDONLY);
-		fexecve(self_file, argv, environ);
+		I_TryRestart(argv);
 	}
 
 	SDL_Quit();
