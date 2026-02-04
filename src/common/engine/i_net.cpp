@@ -23,52 +23,42 @@
 **
 */
 
-/* [Petteri] Check if compiling for Win32:	*/
-#if defined(__WINDOWS__) || defined(__NT__) || defined(_MSC_VER) || defined(_WIN32)
-#ifndef __WIN32__
-#	define __WIN32__
-#endif
-#endif
-/* Follow #ifdef __WIN32__ marks */
-
 #include <stdlib.h>
 #include <string.h>
 
-/* [Petteri] Use Winsock for Win32: */
-#ifdef __WIN32__
+/* [Petteri] Use Winsock if compiling for Win32: */
+#ifdef _WIN32
 #	define WIN32_LEAN_AND_MEAN
 #	define NOMINMAX
 #	include <windows.h>
 #	include <winsock.h>
 #else
-#	include <sys/socket.h>
-#	include <netinet/in.h>
 #	include <arpa/inet.h>
 #	include <errno.h>
-#	include <unistd.h>
 #	include <netdb.h>
+#	include <netinet/in.h>
 #	include <sys/ioctl.h>
+#	include <sys/socket.h>
+#	include <unistd.h>
 #	ifdef __sun
 #		include <fcntl.h>
 #	endif
 #endif
 
-#include "i_system.h"
+#include "c_cvars.h"
+#include "cmdlib.h"
+#include "engineerrors.h"
+#include "i_interface.h"
+#include "i_net.h"
 #include "m_argv.h"
 #include "m_crc32.h"
-#include "st_start.h"
-#include "engineerrors.h"
-#include "cmdlib.h"
-#include "printf.h"
-#include "i_interface.h"
-#include "c_cvars.h"
-#include "i_net.h"
 #include "m_random.h"
+#include "printf.h"
 #include "version.h"
-#include "common/widgets/netstartwindow.h"
+#include "widgets/netstartwindow.h"
 
 /* [Petteri] Get more portable: */
-#ifndef __WIN32__
+#ifndef _WIN32
 typedef int SOCKET;
 #define SOCKET_ERROR		-1
 #define INVALID_SOCKET		-1
@@ -84,7 +74,7 @@ typedef int SOCKET;
 #define IPPORT_USERRESERVED 5000
 #endif
 
-#ifdef __WIN32__
+#ifdef _WIN32
 # include "common/scripting/dap/GameEventEmit.h"
 typedef int socklen_t;
 const char* neterror(void);
@@ -277,7 +267,7 @@ static void BuildAddress(sockaddr_in& address, const char* addrName)
 
 static void StartNetwork(bool autoPort)
 {
-#ifdef __WIN32__
+#ifdef _WIN32
 	WSADATA data;
 	if (!DebugServer::RuntimeEvents::IsDebugServerRunning()) {
 		if (WSAStartup(0x0101, &data))
@@ -306,7 +296,7 @@ void CloseNetwork()
 		MySocket = INVALID_SOCKET;
 		netgame = false;
 	}
-#ifdef __WIN32__
+#ifdef _WIN32
 	if (!DebugServer::RuntimeEvents::IsDebugServerRunning()){
 		WSACleanup();
 	}
@@ -1256,7 +1246,7 @@ bool I_InitNetwork()
 	return true;
 }
 
-#ifdef __WIN32__
+#ifdef _WIN32
 const char* neterror()
 {
 	static char neterr[16];
