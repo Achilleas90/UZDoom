@@ -22,17 +22,17 @@
 **
 */
 
+#include <SDL2/SDL.h>
+
 #include <dirent.h>
+#include <fcntl.h>
 #include <fnmatch.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/wait.h>
-#include <unistd.h>
-
-#include <fcntl.h>
-#include <stdarg.h>
 #include <sys/ioctl.h>
+#include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -46,21 +46,15 @@
 #include <termios.h>
 #endif
 
-#include <SDL2/SDL.h>
-
 #include "c_cvars.h"
-#include "cmdlib.h"
 #include "i_interface.h"
-#include "i_sound.h"
-#include "widgets/launcherwindow.h"
-#include "m_argv.h"
 #include "palutil.h"
 #include "printf.h"
 #include "st_start.h"
 #include "v_font.h"
-#include "version.h"
 #include "vm.h"
-#include "common/widgets/errorwindow.h"
+#include "widgets/errorwindow.h"
+#include "widgets/launcherwindow.h"
 
 #if defined(__APPLE__)
 int I_PickIWad_Cocoa (WadStuff *wads, int numwads, bool showwin, int defaultiwad);
