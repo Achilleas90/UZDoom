@@ -7065,6 +7065,7 @@ AActor *P_SpawnBlood (const DVector3 &pos1, DAngle dir, int damage, AActor *orig
 		th->Angles.Yaw = dir;
 		// [NG] Applying PUFFGETSOWNER to the blood will make it target the owner
 		if (th->flags5 & MF5_PUFFGETSOWNER) th->target = originator;
+		th->health = damage > 0 ? damage : 1;
 		if (gameinfo.gametype & GAME_DoomChex)
 		{
 			th->tics -= pr_spawnblood() & 3;
@@ -7175,6 +7176,7 @@ void P_BloodSplatter (const DVector3 &pos, AActor *originator, DAngle hitangle)
 
 		mo = Spawn(originator->Level, bloodcls, pos, NO_REPLACE); // GetBloodType already performed the replacement
 		mo->target = originator;
+		mo->health = 12;
 		mo->Vel.X = pr_splatter.Random2 () / 64.;
 		mo->Vel.Y = pr_splatter.Random2() / 64.;
 		mo->Vel.Z = 3;
@@ -7218,6 +7220,7 @@ void P_BloodSplatter2 (const DVector3 &pos, AActor *originator, DAngle hitangle)
 
 		mo = Spawn (originator->Level, bloodcls, pos + add, NO_REPLACE); // GetBloodType already performed the replacement
 		mo->target = originator;
+		mo->health = 20;
 
 		// colorize the blood!
 		if (!(mo->flags2 & MF2_DONTTRANSLATE))
@@ -7272,6 +7275,7 @@ void P_RipperBlood (AActor *mo, AActor *bleeder)
 		th = Spawn (bleeder->Level, bloodcls, pos, NO_REPLACE); // GetBloodType already performed the replacement
 		// [NG] Applying PUFFGETSOWNER to the blood will make it target the owner
 		if (th->flags5 & MF5_PUFFGETSOWNER) th->target = bleeder;
+		th->health = 18;
 		if (gameinfo.gametype == GAME_Heretic)
 			th->flags |= MF_NOGRAVITY;
 		th->Vel.X = mo->Vel.X / 2;

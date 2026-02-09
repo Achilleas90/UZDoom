@@ -1070,6 +1070,7 @@ void DBaseStatusBar::DrawCrosshair (double ticFrac)
 			drawThickLine(center + DVector2(+gap, +gap), center + DVector2(+gap + arm, +gap + arm), DVector2(1.0, -1.0));
 		}
 	}
+
 }
 
 static void DrawCrosshair(DBaseStatusBar* self, double ticFrac)

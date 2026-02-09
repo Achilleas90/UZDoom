@@ -21,6 +21,39 @@
 
 class Blood : Actor
 {
+	const BLOOD_POOL_DAMAGE_THRESHOLD = 20;
+
+	action void A_BloodLandTick()
+	{
+		if (self.special1 != 0 || self.pos.Z > self.floorz + 1)
+		{
+			return;
+		}
+		self.special1 = 1;
+
+		if (self.GetFloorTerrain().IsLiquid)
+		{
+			return;
+		}
+
+		if (self.health >= BLOOD_POOL_DAMAGE_THRESHOLD)
+		{
+			let pool = self.Spawn("BloodPool", (self.pos.xy, self.floorz), ALLOW_REPLACE);
+			if (pool)
+			{
+				pool.Translation = self.Translation;
+			}
+		}
+		else
+		{
+			let pool = self.Spawn("SmallBloodPool", (self.pos.xy, self.floorz), ALLOW_REPLACE);
+			if (pool)
+			{
+				pool.Translation = self.Translation;
+			}
+		}
+	}
+
 	Default
 	{
 		Mass 5;
@@ -31,7 +64,9 @@ class Blood : Actor
 	States
 	{
 	Spawn:
-		BLUD CBA 8;
+		BLUD C 8 A_BloodLandTick;
+		BLUD B 8 A_BloodLandTick;
+		BLUD A 8 A_BloodLandTick;
 		Stop;
 	Spray:
 		SPRY ABCDEF 3;
@@ -44,6 +79,39 @@ class Blood : Actor
 
 class BloodSplatter : Actor
 {
+	const BLOOD_POOL_DAMAGE_THRESHOLD = 20;
+
+	action void A_BloodLandTick()
+	{
+		if (self.special1 != 0 || self.pos.Z > self.floorz + 1)
+		{
+			return;
+		}
+		self.special1 = 1;
+
+		if (self.GetFloorTerrain().IsLiquid)
+		{
+			return;
+		}
+
+		if (self.health >= BLOOD_POOL_DAMAGE_THRESHOLD)
+		{
+			let pool = self.Spawn("BloodPool", (self.pos.xy, self.floorz), ALLOW_REPLACE);
+			if (pool)
+			{
+				pool.Translation = self.Translation;
+			}
+		}
+		else
+		{
+			let pool = self.Spawn("SmallBloodPool", (self.pos.xy, self.floorz), ALLOW_REPLACE);
+			if (pool)
+			{
+				pool.Translation = self.Translation;
+			}
+		}
+	}
+
 	Default
 	{
 		Radius 2;
@@ -59,10 +127,12 @@ class BloodSplatter : Actor
 	States
 	{
 	Spawn:
-		BLUD CBA 8;
+		BLUD C 8 A_BloodLandTick;
+		BLUD B 8 A_BloodLandTick;
+		BLUD A 8 A_BloodLandTick;
 		Stop;
 	Death:
-		BLUD A 6;
+		BLUD A 6 A_BloodLandTick;
 		Stop;
 	}
 }

@@ -64,7 +64,7 @@ static FRandom pr_switcher ("SwitchTarget");
 CVAR (Bool, cl_showsprees, true, CVAR_ARCHIVE)
 CVAR (Bool, cl_showmultikills, true, CVAR_ARCHIVE)
 CVAR(Bool, cl_hitconfirm_sound, false, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
-CUSTOM_CVAR(Float, cl_hitconfirm_sound_volume, 0.35f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
+CUSTOM_CVAR(Float, cl_hitconfirm_sound_volume, 0.70f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 {
 	if (self < 0.0f) self = 0.0f;
 	else if (self > 1.0f) self = 1.0f;
@@ -1578,7 +1578,7 @@ static int DoDamageMobj(AActor *target, AActor *inflictor, AActor *source, int d
 		{
 			const char* cue = killConfirm ? "misc/secret" : "menu/change";
 			const float cueVolume = killConfirm ? clamp(cl_hitconfirm_sound_volume * 1.35f, 0.f, 1.f) : cl_hitconfirm_sound_volume;
-			S_Sound(CHAN_AUTO, CHANF_UI | CHANF_NORUMBLE, cue, cueVolume, ATTN_NONE);
+			S_Sound(CHAN_AUTO, CHANF_NORUMBLE, cue, cueVolume, ATTN_NONE);
 		}
 	}
 
