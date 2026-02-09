@@ -542,6 +542,9 @@ class OptionMenuItemControlBase : OptionMenuItem
 	KeyBindings mBindings;
 	int mInput;
 	bool mWaiting;
+	int mPendingInput;
+	bool mPendingConflict;
+	String mPendingExisting;
 
 	protected void Init(String label, Name command, KeyBindings bindings)
 	{
@@ -578,7 +581,29 @@ class OptionMenuItemControlBase : OptionMenuItem
 		if (mkey == Menu.MKEY_Input)
 		{
 			mWaiting = false;
+			let existing = mBindings.GetBinding(mInput);
+			if (existing.Length() > 0 && existing.CompareNoCase(mAction) != 0)
+			{
+				mPendingInput = mInput;
+				mPendingExisting = existing;
+				mPendingConflict = true;
+				String keyName = KeyBindings.NameKeys(mInput, 0);
+				String FullString = String.Format("%s%s%s\n\nKey is already bound to:\n%s%s%s\n\nReplace it?", TEXTCOLOR_WHITE, keyName, TEXTCOLOR_NORMAL, TEXTCOLOR_TAN, existing, TEXTCOLOR_NORMAL);
+				Menu.StartMessage(FullString, 0);
+				return true;
+			}
 			mBindings.SetBind(mInput, mAction);
+			return true;
+		}
+		else if (mkey == Menu.MKEY_MBYes && mPendingConflict)
+		{
+			mBindings.SetBind(mPendingInput, mAction);
+			mPendingConflict = false;
+			return true;
+		}
+		else if (mkey == Menu.MKEY_MBNo && mPendingConflict)
+		{
+			mPendingConflict = false;
 			return true;
 		}
 		else if (mkey == Menu.MKEY_Clear)
@@ -632,6 +657,8 @@ class OptionMenuItemDoubleControl : OptionMenuItemControlBase
 {
 	string mDoubleAction;
 	KeyBindings mDoubleBindings;
+	int mPendingDoubleInput;
+	bool mPendingDoubleConflict;
 
 	OptionMenuItemDoubleControl Init(String label, Name command, Name doublecommand)
 	{
@@ -646,8 +673,35 @@ class OptionMenuItemDoubleControl : OptionMenuItemControlBase
 		if (mkey == Menu.MKEY_Input)
 		{
 			mWaiting = false;
+			let existing = mBindings.GetBinding(mInput);
+			let existingDouble = mDoubleBindings.GetBinding(mInput);
+			bool hasConflict = (existing.Length() > 0 && existing.CompareNoCase(mAction) != 0) ||
+				(existingDouble.Length() > 0 && existingDouble.CompareNoCase(mDoubleAction) != 0);
+			if (hasConflict)
+			{
+				mPendingDoubleInput = mInput;
+				mPendingDoubleConflict = true;
+				String keyName = KeyBindings.NameKeys(mInput, 0);
+				String existingText = existing.Length() > 0 ? existing : "(none)";
+				String existingDoubleText = existingDouble.Length() > 0 ? existingDouble : "(none)";
+				String FullString = String.Format("%s%s%s\n\nCurrent bind: %s\nCurrent double bind: %s\n\nReplace both?", TEXTCOLOR_WHITE, keyName, TEXTCOLOR_NORMAL, existingText, existingDoubleText);
+				Menu.StartMessage(FullString, 0);
+				return true;
+			}
 			mBindings.SetBind(mInput, mAction);
 			mDoubleBindings.SetBind(mInput, mDoubleAction);
+			return true;
+		}
+		else if (mkey == Menu.MKEY_MBYes && mPendingDoubleConflict)
+		{
+			mBindings.SetBind(mPendingDoubleInput, mAction);
+			mDoubleBindings.SetBind(mPendingDoubleInput, mDoubleAction);
+			mPendingDoubleConflict = false;
+			return true;
+		}
+		else if (mkey == Menu.MKEY_MBNo && mPendingDoubleConflict)
+		{
+			mPendingDoubleConflict = false;
 			return true;
 		}
 		else if (mkey == Menu.MKEY_Clear)

@@ -31,6 +31,7 @@
 #include <zwidget/widgets/dropdown/dropdown.h>
 #include <zwidget/widgets/textlabel/textlabel.h>
 #include <zwidget/widgets/checkboxlabel/checkboxlabel.h>
+#include <zwidget/widgets/pushbutton/pushbutton.h>
 
 static constexpr struct { const char* string; int flag; } FILELOAD_OPTS[] = {
 	{"OPTVAL_LAX", REQUIRE_NONE},
@@ -44,6 +45,7 @@ SettingsPage::SettingsPage(LauncherWindow* launcher, const FStartupSelectionInfo
 	LangLabel = new TextLabel(this);
 	GeneralLabel = new TextLabel(this);
 	ExtrasLabel = new TextLabel(this);
+	ProfileLabel = new TextLabel(this);
 	FullscreenCheckbox = new CheckboxLabel(this);
 	DisableAutoloadCheckbox = new CheckboxLabel(this);
 	DontAskAgainCheckbox = new CheckboxLabel(this);
@@ -51,6 +53,10 @@ SettingsPage::SettingsPage(LauncherWindow* launcher, const FStartupSelectionInfo
 	BrightmapsCheckbox = new CheckboxLabel(this);
 	WidescreenCheckbox = new CheckboxLabel(this);
 	SupportWadsCheckbox = new CheckboxLabel(this);
+	ProfileList = new Dropdown(this);
+	ProfileNewButton = new PushButton(this);
+	ProfileDuplicateButton = new PushButton(this);
+	ProfileDeleteButton = new PushButton(this);
 
 	FullscreenCheckbox->SetChecked(info.DefaultFullscreen);
 	DontAskAgainCheckbox->SetChecked(!info.DefaultQueryIWAD);
@@ -127,6 +133,10 @@ SettingsPage::SettingsPage(LauncherWindow* launcher, const FStartupSelectionInfo
 		++i;
 	}
 	LangList->OnChanged = [=](int i) { OnLanguageChanged(i); };
+	ProfileList->OnChanged = [=](int i) { OnProfileChanged(i); };
+	ProfileNewButton->OnClick = [=]() { OnProfileNew(); };
+	ProfileDuplicateButton->OnClick = [=]() { OnProfileDuplicate(); };
+	ProfileDeleteButton->OnClick = [=]() { OnProfileDelete(); };
 
 	ExtraWadFlags = 0;
 
@@ -152,6 +162,18 @@ SettingsPage::SettingsPage(LauncherWindow* launcher, const FStartupSelectionInfo
 		}
 		LoadList->SetSelectedItem(selected);
 	}
+
+	FullscreenCheckbox->FuncChanged = [=](bool) { Launcher->UpdatePlayButton(); };
+	DisableAutoloadCheckbox->FuncChanged = [=](bool) { Launcher->UpdatePlayButton(); };
+	DontAskAgainCheckbox->FuncChanged = [=](bool) { Launcher->UpdatePlayButton(); };
+	LightsCheckbox->FuncChanged = [=](bool) { Launcher->UpdatePlayButton(); };
+	BrightmapsCheckbox->FuncChanged = [=](bool) { Launcher->UpdatePlayButton(); };
+	WidescreenCheckbox->FuncChanged = [=](bool) { Launcher->UpdatePlayButton(); };
+	SupportWadsCheckbox->FuncChanged = [=](bool) { Launcher->UpdatePlayButton(); };
+	LoadList->OnChanged = [=](int) { Launcher->UpdatePlayButton(); };
+
+	UpdateProfileList();
+	ApplyValues(info);
 }
 
 void SettingsPage::SetValues(FStartupSelectionInfo& info) const
@@ -180,6 +202,41 @@ void SettingsPage::SetValues(FStartupSelectionInfo& info) const
 #endif
 }
 
+void SettingsPage::ApplyValues(const FStartupSelectionInfo& info)
+{
+	FullscreenCheckbox->SetChecked(info.DefaultFullscreen);
+	DontAskAgainCheckbox->SetChecked(!info.DefaultQueryIWAD);
+	DisableAutoloadCheckbox->SetChecked(info.DefaultStartFlags & 1);
+	LightsCheckbox->SetChecked(info.DefaultStartFlags & 2);
+	BrightmapsCheckbox->SetChecked(info.DefaultStartFlags & 4);
+	WidescreenCheckbox->SetChecked(info.DefaultStartFlags & 8);
+	SupportWadsCheckbox->SetChecked(info.DefaultStartFlags & 16);
+
+#ifdef RENDER_BACKENDS
+	OpenGLCheckbox->SetChecked(info.DefaultBackend == 0);
+	VulkanCheckbox->SetChecked(info.DefaultBackend == 1);
+	GLESCheckbox->SetChecked(info.DefaultBackend == 2);
+#endif
+	for (int i = 0; i < (int)languages.Size(); i++)
+	{
+		if (!languages[i].first.CompareNoCase(info.DefaultLanguage))
+		{
+			LangList->SetSelectedItem(i);
+			break;
+		}
+	}
+	int opts = sizeof(FILELOAD_OPTS) / sizeof(FILELOAD_OPTS[0]);
+	for (int i = 0; i < opts; i++)
+	{
+		if (info.DefaultFileLoadBehaviour == FILELOAD_OPTS[i].flag)
+		{
+			LoadList->SetSelectedItem(i);
+			break;
+		}
+	}
+	UpdateProfileList();
+}
+
 void SettingsPage::UpdateLanguage()
 {
 	LangLabel->SetText(GStrings.GetString("OPTMNU_LANGUAGE"));
@@ -193,6 +250,10 @@ void SettingsPage::UpdateLanguage()
 	BrightmapsCheckbox->SetText(GStrings.GetString("PICKER_BRIGHTMAPS"));
 	WidescreenCheckbox->SetText(GStrings.GetString("PICKER_WIDESCREEN"));
 	SupportWadsCheckbox->SetText(GStrings.GetString("PICKER_SUPPORTWADS"));
+	ProfileLabel->SetText("Startup Profile");
+	ProfileNewButton->SetText("New");
+	ProfileDuplicateButton->SetText("Duplicate");
+	ProfileDeleteButton->SetText("Delete");
 
 #ifdef RENDER_BACKENDS
 	BackendLabel->SetText(GStrings.GetString("PICKER_PREFERBACKEND"));
@@ -210,6 +271,41 @@ void SettingsPage::OnLanguageChanged(int i)
 	Launcher->UpdateLanguage();
 }
 
+void SettingsPage::OnProfileChanged(int i)
+{
+	if (updatingProfiles) return;
+	Launcher->ApplyProfile(i);
+}
+
+void SettingsPage::OnProfileNew()
+{
+	Launcher->NewProfile();
+}
+
+void SettingsPage::OnProfileDuplicate()
+{
+	Launcher->DuplicateProfile();
+}
+
+void SettingsPage::OnProfileDelete()
+{
+	Launcher->DeleteProfile();
+}
+
+void SettingsPage::UpdateProfileList()
+{
+	updatingProfiles = true;
+	ProfileList->ClearItems();
+	const auto& info = Launcher->GetInfo();
+	for (const auto& profile : info.Profiles)
+	{
+		ProfileList->AddItem(profile.Name.GetChars());
+	}
+	if (info.Profiles.Size() > 0)
+		ProfileList->SetSelectedItem(clamp<int>(info.ActiveProfile, 0, info.Profiles.Size() - 1));
+	updatingProfiles = false;
+}
+
 void SettingsPage::OnGeometryChanged()
 {
 	double panelWidth = 160.0;
@@ -219,6 +315,15 @@ void SettingsPage::OnGeometryChanged()
 
 	GeneralLabel->SetFrameGeometry(0.0, y, 190.0, GeneralLabel->GetPreferredHeight());
 	y += GeneralLabel->GetPreferredHeight();
+
+	ProfileLabel->SetFrameGeometry(0.0, y, 190.0, ProfileLabel->GetPreferredHeight());
+	y += ProfileLabel->GetPreferredHeight();
+	ProfileList->SetFrameGeometry(0.0, y, 190.0, ProfileList->GetPreferredHeight());
+	y += ProfileList->GetPreferredHeight() + 2.0;
+	ProfileNewButton->SetFrameGeometry(0.0, y, 60.0, ProfileNewButton->GetPreferredHeight());
+	ProfileDuplicateButton->SetFrameGeometry(64.0, y, 80.0, ProfileDuplicateButton->GetPreferredHeight());
+	ProfileDeleteButton->SetFrameGeometry(148.0, y, 60.0, ProfileDeleteButton->GetPreferredHeight());
+	y += ProfileNewButton->GetPreferredHeight() + 4.0;
 
 	FullscreenCheckbox->SetFrameGeometry(0.0, y, 190.0, FullscreenCheckbox->GetPreferredHeight());
 	y += FullscreenCheckbox->GetPreferredHeight();

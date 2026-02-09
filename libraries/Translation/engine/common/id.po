@@ -1979,6 +1979,30 @@ msgstr "Versi %s"
 msgid "PICKER_PREFERBACKEND"
 msgstr "API Rendering"
 
+msgid "PICKER_TAB_QUICKSETUP"
+msgstr ""
+
+msgid "PICKER_QUICKSETUP_TITLE"
+msgstr ""
+
+msgid "PICKER_QUICKSETUP_INTRO"
+msgstr ""
+
+msgid "PICKER_QUICKSETUP_FULLSCREEN"
+msgstr ""
+
+msgid "PICKER_QUICKSETUP_ASKIWAD"
+msgstr ""
+
+msgid "PICKER_QUICKSETUP_AUTOLOAD"
+msgstr ""
+
+msgid "PICKER_QUICKSETUP_BACKEND"
+msgstr ""
+
+msgid "PICKER_QUICKSETUP_SHOWAGAIN"
+msgstr ""
+
 msgid "PICKER_TAB_PLAY"
 msgstr ""
 

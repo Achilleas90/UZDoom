@@ -32,6 +32,7 @@ class PlayGamePage : public Widget
 public:
 	PlayGamePage(LauncherWindow* launcher, const FStartupSelectionInfo& info);
 	void UpdateLanguage();
+	void ApplyValues(const FStartupSelectionInfo& info);
 	void SetValues(FStartupSelectionInfo& info) const;
 
 private:

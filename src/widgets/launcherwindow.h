@@ -29,6 +29,7 @@ class SettingsPage;
 class NetworkPage;
 class ReleasePage;
 class AboutPage;
+class QuickSetupPage;
 struct WadStuff;
 struct FStartupSelectionInfo;
 
@@ -45,6 +46,15 @@ public:
 	bool IsInMultiplayer() const;
 	bool IsHosting() const;
 	void UpdatePlayButton();
+	void CaptureInfoFromPages();
+	void ApplyInfoToPages();
+	void ApplyProfile(int index);
+	void DuplicateProfile();
+	void NewProfile();
+	void DeleteProfile();
+	FString GetCommandPreview();
+	bool GetLaunchWarning(FString& warning);
+	const FStartupSelectionInfo& GetInfo() const { return *Info; }
 
 private:
 	void OnClose() override;
@@ -57,6 +67,7 @@ private:
 	PlayGamePage* PlayGame = nullptr;
 	SettingsPage* Settings = nullptr;
 	NetworkPage* Network = nullptr;
+	QuickSetupPage* QuickSetup = nullptr;
 	ReleasePage* Release = nullptr;
 	AboutPage* About = nullptr;
 

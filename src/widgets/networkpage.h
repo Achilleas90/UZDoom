@@ -38,6 +38,7 @@ class NetworkPage : public Widget
 public:
 	NetworkPage(LauncherWindow* launcher, const FStartupSelectionInfo& info);
 	void UpdateLanguage();
+	void ApplyValues(const FStartupSelectionInfo& info);
 	void UpdatePlayButton();
 	bool IsInHost() const;
 	void SetValues(FStartupSelectionInfo& info) const;
@@ -70,6 +71,7 @@ class HostSubPage : public Widget
 {
 public:
 	HostSubPage(NetworkPage* main, const FStartupSelectionInfo& info);
+	void ApplyValues(const FStartupSelectionInfo& info);
 	void UpdateLanguage();
 	void SetValues(FStartupSelectionInfo& info) const;
 
@@ -83,6 +85,8 @@ private:
 	CheckboxLabel* ExtraTicCheckbox = nullptr;
 
 	TextLabel* GameModesLabel = nullptr;
+	TextLabel* PresetLabel = nullptr;
+	Dropdown* PresetDropdown = nullptr;
 	Dropdown* GameModesDropdown = nullptr;
 	CheckboxLabel* AltDeathmatchCheckbox = nullptr;
 	TextLabel* TeamLabel = nullptr;
@@ -101,6 +105,7 @@ class JoinSubPage : public Widget
 {
 public:
 	JoinSubPage(NetworkPage* main, const FStartupSelectionInfo& info);
+	void ApplyValues(const FStartupSelectionInfo& info);
 	void UpdateLanguage();
 	void SetValues(FStartupSelectionInfo& info) const;
 
@@ -110,6 +115,8 @@ private:
 	NetworkPage* MainTab = nullptr;
 
 	TextLabel* AddressLabel = nullptr;
+	TextLabel* RecentLabel = nullptr;
+	Dropdown* RecentDropdown = nullptr;
 	LineEdit* AddressEdit = nullptr;
 	TextLabel* AddressPortLabel = nullptr;
 	LineEdit* AddressPortEdit = nullptr;

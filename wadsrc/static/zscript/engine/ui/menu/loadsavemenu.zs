@@ -90,9 +90,14 @@ class LoadSaveMenu : ListMenu
 
 	bool mEntering;
 	TextEnterMenu mInput;
+	bool mSearchEntering;
+	TextEnterMenu mSearchInput;
+	String mSearchQuery;
+	bool mFilterCompatibleOnly;
 	double FontScale;
 
 	BrokenLines BrokenSaveComment;
+	Array<int> mVisible;
 
 
 
@@ -107,7 +112,81 @@ class LoadSaveMenu : ListMenu
 		Super.Init(parent, desc);
 		manager = SavegameManager.GetManager();
 		manager.ReadSaveStrings();
+		mSearchEntering = false;
+		mSearchQuery = "";
+		mFilterCompatibleOnly = false;
 		SetWindows();
+	}
+
+	protected bool PassesFilter(SaveGameNode node)
+	{
+		if (mFilterCompatibleOnly && (node.bOldVersion || node.bMissingWads))
+		{
+			return false;
+		}
+		if (mSearchQuery.Length() > 0)
+		{
+			return node.SaveTitle.MakeLower().IndexOf(mSearchQuery.MakeLower()) >= 0;
+		}
+		return true;
+	}
+
+	protected int RawSelected()
+	{
+		if (Selected < 0 || Selected >= mVisible.Size()) return -1;
+		return mVisible[Selected];
+	}
+
+	protected int FindVisibleByRaw(int raw)
+	{
+		for (int i = 0; i < mVisible.Size(); i++)
+		{
+			if (mVisible[i] == raw) return i;
+		}
+		return -1;
+	}
+
+	protected void RebuildVisible(bool preserve = true)
+	{
+		int oldRaw = RawSelected();
+		int oldTopRaw = (TopItem >= 0 && TopItem < mVisible.Size()) ? mVisible[TopItem] : -1;
+		mVisible.Clear();
+		for (int i = 0; i < manager.SavegameCount(); i++)
+		{
+			let node = manager.GetSavegame(i);
+			if (PassesFilter(node))
+			{
+				mVisible.Push(i);
+			}
+		}
+
+		if (mVisible.Size() == 0)
+		{
+			Selected = -1;
+			TopItem = 0;
+			manager.UnloadSaveData();
+			UpdateSaveComment();
+			return;
+		}
+
+		if (preserve && oldRaw >= 0)
+			Selected = FindVisibleByRaw(oldRaw);
+		if (Selected < 0 || Selected >= mVisible.Size())
+			Selected = clamp(Selected, 0, mVisible.Size() - 1);
+
+		if (preserve && oldTopRaw >= 0)
+			TopItem = FindVisibleByRaw(oldTopRaw);
+		if (TopItem < 0) TopItem = 0;
+		if (TopItem > max(0, mVisible.Size() - listboxRows))
+			TopItem = max(0, mVisible.Size() - listboxRows);
+		if (Selected < TopItem)
+			TopItem = Selected;
+		else if (Selected >= TopItem + listboxRows)
+			TopItem = max(0, Selected - listboxRows + 1);
+
+		manager.UnloadSaveData();
+		manager.ExtractSaveData(RawSelected());
+		UpdateSaveComment();
 	}
 
 	private void SetWindows()
@@ -182,15 +261,17 @@ class LoadSaveMenu : ListMenu
 		}
 
 		SetWindows();
+		RebuildVisible(false);
 		DrawFrame(savepicLeft, savepicTop, savepicWidth, savepicHeight);
 		if (!manager.DrawSavePic(savepicLeft, savepicTop, savepicWidth, savepicHeight))
 		{
 			screen.Dim(0, 0.6, savepicLeft, savepicTop, savepicWidth, savepicHeight);
 
-			if (manager.SavegameCount() > 0)
+			if (mVisible.Size() > 0)
 			{
-				if (Selected >= manager.SavegameCount()) Selected = 0;
-				String text = (Selected == -1 || !manager.GetSavegame(Selected).bOldVersion)? Stringtable.Localize("$MNU_NOPICTURE") : Stringtable.Localize("$MNU_DIFFVERSION");
+				if (Selected >= mVisible.Size()) Selected = 0;
+				int rawsel = RawSelected();
+				String text = (rawsel == -1 || !manager.GetSavegame(rawsel).bOldVersion)? Stringtable.Localize("$MNU_NOPICTURE") : Stringtable.Localize("$MNU_DIFFVERSION");
 				int textlen = NewSmallFont.StringWidth(text);
 
 				screen.DrawText (NewSmallFont, Font.CR_GOLD, (savepicLeft + savepicWidth / 2) / FontScale - textlen/2,
@@ -214,9 +295,9 @@ class LoadSaveMenu : ListMenu
 		DrawFrame (listboxLeft, listboxTop, listboxWidth, listboxHeight);
 		screen.Dim(0, 0.6, listboxLeft, listboxTop, listboxWidth, listboxHeight);
 
-		if (manager.SavegameCount() == 0)
+		if (mVisible.Size() == 0)
 		{
-			String text = Stringtable.Localize("$MNU_NOFILES");
+			String text = String.Format("%s\n\n%s", Stringtable.Localize("$MNU_NOFILES"), mSearchQuery.Length() > 0 ? "No matches for current search/filter." : "");
 			int textlen = int(NewConsoleFont.StringWidth(text) * FontScale);
 
 			screen.DrawText (NewConsoleFont, Font.CR_GOLD, (listboxLeft+(listboxWidth-textlen)/2) / FontScale, (listboxTop+(listboxHeight-rowHeight)/2) / FontScale, text, 
@@ -225,10 +306,11 @@ class LoadSaveMenu : ListMenu
 		}
 
 		j = TopItem;
-		for (i = 0; i < listboxRows && j < manager.SavegameCount(); i++)
+		for (i = 0; i < listboxRows && j < mVisible.Size(); i++)
 		{
 			int colr;
-			node = manager.GetSavegame(j);
+			int rawj = mVisible[j];
+			node = manager.GetSavegame(rawj);
 			if (node.bOldVersion)
 			{
 				colr = Font.CR_RED;
@@ -274,6 +356,10 @@ class LoadSaveMenu : ListMenu
 			screen.ClearClipRect();
 			j++;
 		}
+
+		String status = String.Format("Search: %s  Filter: %s", mSearchQuery.Length() > 0 ? mSearchQuery : "(none)", mFilterCompatibleOnly ? "Compatible only" : "All");
+		screen.DrawText(NewSmallFont, Font.CR_GRAY, listboxLeft / FontScale, (listboxTop + listboxHeight + 2) / FontScale, status,
+			DTA_VirtualWidthF, screen.GetWidth() / FontScale, DTA_VirtualHeightF, screen.GetHeight() / FontScale, DTA_KeepRatio, true);
 	} 
 
 	void UpdateSaveComment()
@@ -289,75 +375,91 @@ class LoadSaveMenu : ListMenu
 
 	virtual void TryDeleteMessage()
 	{
-		if (Selected != -1 && Selected < manager.SavegameCount())
+		int rawsel = RawSelected();
+		if (rawsel != -1)
 		{
 			String EndString;
-			EndString = String.Format("%s%s%s%s?\n\n%s", Stringtable.Localize("$MNU_DELETESG"), TEXTCOLOR_WHITE, manager.GetSavegame(Selected).SaveTitle, TEXTCOLOR_NORMAL, Stringtable.Localize("$PRESSYN"));
+			EndString = String.Format("%s%s%s%s?\n\n%s", Stringtable.Localize("$MNU_DELETESG"), TEXTCOLOR_WHITE, manager.GetSavegame(rawsel).SaveTitle, TEXTCOLOR_NORMAL, Stringtable.Localize("$PRESSYN"));
 			StartMessage (EndString, 0);
 		}
 	}
 
 	override bool MenuEvent (int mkey, bool fromcontroller)
 	{
+		if (mkey == Menu.MKEY_Input && mSearchEntering)
+		{
+			mSearchEntering = false;
+			mSearchQuery = mSearchInput.GetText();
+			mSearchInput = null;
+			RebuildVisible();
+			return true;
+		}
+		if (mkey == Menu.MKEY_Abort && mSearchEntering)
+		{
+			mSearchEntering = false;
+			mSearchInput = null;
+			return true;
+		}
+
 		switch (mkey)
 		{
 		case MKEY_Up:
-			if (manager.SavegameCount() > 1)
+			if (mVisible.Size() > 1)
 			{
 				if (Selected == -1) Selected = TopItem;
 				else
 				{
-					if (--Selected < 0) Selected = manager.SavegameCount()-1;
+					if (--Selected < 0) Selected = mVisible.Size()-1;
 					if (Selected < TopItem) TopItem = Selected;
 					else if (Selected >= TopItem + listboxRows) TopItem = MAX(0, Selected - listboxRows + 1);
 				}
 				manager.UnloadSaveData ();
-				manager.ExtractSaveData (Selected);
+				manager.ExtractSaveData (RawSelected());
 				UpdateSaveComment();
 			}
 			return true;
 
 		case MKEY_Down:
-			if (manager.SavegameCount() > 1)
+			if (mVisible.Size() > 1)
 			{
 				if (Selected == -1) Selected = TopItem;
 				else
 				{
-					if (++Selected >= manager.SavegameCount()) Selected = 0;
+					if (++Selected >= mVisible.Size()) Selected = 0;
 					if (Selected < TopItem) TopItem = Selected;
 					else if (Selected >= TopItem + listboxRows) TopItem = MAX(0, Selected - listboxRows + 1);
 				}
 				manager.UnloadSaveData ();
-				manager.ExtractSaveData (Selected);
+				manager.ExtractSaveData (RawSelected());
 				UpdateSaveComment();
 			}
 			return true;
 
 		case MKEY_PageDown:
-			if (manager.SavegameCount() > 1)
+			if (mVisible.Size() > 1)
 			{
-				if (TopItem >= manager.SavegameCount() - listboxRows)
+				if (TopItem >= mVisible.Size() - listboxRows)
 				{
 					TopItem = 0;
 					if (Selected != -1) Selected = 0;
 				}
 				else
 				{
-					TopItem = MIN(TopItem + listboxRows, manager.SavegameCount() - listboxRows);
+					TopItem = MIN(TopItem + listboxRows, mVisible.Size() - listboxRows);
 					if (TopItem > Selected && Selected != -1) Selected = TopItem;
 				}
 				manager.UnloadSaveData ();
-				manager.ExtractSaveData (Selected);
+				manager.ExtractSaveData (RawSelected());
 				UpdateSaveComment();
 			}
 			return true;
 
 		case MKEY_PageUp:
-			if (manager.SavegameCount() > 1)
+			if (mVisible.Size() > 1)
 			{
 				if (TopItem == 0)
 				{
-					TopItem = MAX(0, manager.SavegameCount() - listboxRows);
+					TopItem = MAX(0, mVisible.Size() - listboxRows);
 					if (Selected != -1) Selected = TopItem;
 				}
 				else
@@ -366,7 +468,7 @@ class LoadSaveMenu : ListMenu
 					if (Selected >= TopItem + listboxRows) Selected = TopItem;
 				}
 				manager.UnloadSaveData ();
-				manager.ExtractSaveData (Selected);
+				manager.ExtractSaveData (RawSelected());
 				UpdateSaveComment();
 			}
 			return true;
@@ -384,10 +486,19 @@ class LoadSaveMenu : ListMenu
 
 		case MKEY_MBYes:
 		{
-			if (Selected < manager.SavegameCount())
+			int rawsel = RawSelected();
+			if (rawsel >= 0)
 			{
-				Selected = manager.RemoveSaveSlot (Selected);
-				UpdateSaveComment();
+				int nextraw = manager.RemoveSaveSlot(rawsel);
+				RebuildVisible(false);
+				Selected = FindVisibleByRaw(nextraw);
+				if (Selected < 0 && mVisible.Size() > 0) Selected = 0;
+				if (Selected >= 0)
+				{
+					manager.UnloadSaveData();
+					manager.ExtractSaveData(RawSelected());
+					UpdateSaveComment();
+				}
 			}
 			return true;
 		}
@@ -410,11 +521,11 @@ class LoadSaveMenu : ListMenu
 		{
 			int lineno = (y - listboxTop) / rowHeight;
 
-			if (TopItem + lineno < manager.SavegameCount())
+			if (TopItem + lineno < mVisible.Size())
 			{
 				Selected = TopItem + lineno;
 				manager.UnloadSaveData ();
-				manager.ExtractSaveData (Selected);
+				manager.ExtractSaveData (RawSelected());
 				UpdateSaveComment();
 				if (type == MOUSE_Release)
 				{
@@ -442,17 +553,28 @@ class LoadSaveMenu : ListMenu
 	{
 		if (ev.Type == UIEvent.Type_KeyDown)
 		{
-			if (Selected != -1 && Selected < manager.SavegameCount())
+			if (Selected != -1 && Selected < mVisible.Size())
 			{
 				switch (ev.KeyChar)
 				{
 				case UIEvent.Key_F1:
-					manager.SetFileInfo(Selected);
+					manager.SetFileInfo(RawSelected());
 					UpdateSaveComment();
 					return true;
 
 				case UIEvent.Key_DEL:
 					TryDeleteMessage();
+					return true;
+				case 70: // F
+				{
+					mSearchInput = TextEnterMenu.OpenTextEnter(self, Menu.OptionFont(), mSearchQuery, -1, false);
+					mSearchInput.ActivateMenu();
+					mSearchEntering = true;
+					return true;
+				}
+				case 67: // C
+					mFilterCompatibleOnly = !mFilterCompatibleOnly;
+					RebuildVisible();
 					return true;
 				}
 			}
@@ -464,7 +586,7 @@ class LoadSaveMenu : ListMenu
 		}
 		else if (ev.Type == UIEvent.Type_WheelDown)
 		{
-			if (TopItem < manager.SavegameCount() - listboxRows) TopItem++;
+			if (TopItem < mVisible.Size() - listboxRows) TopItem++;
 			return true;
 		}
 		return Super.OnUIEvent(ev);
@@ -487,7 +609,10 @@ class SaveMenu : LoadSaveMenu
 	{
 		Super.Init(parent, desc);
 		manager.InsertNewSaveNode();
-		Selected = manager.ExtractSaveData (-1);
+		RebuildVisible(false);
+		int raw = manager.ExtractSaveData(-1);
+		Selected = FindVisibleByRaw(raw);
+		if (Selected < 0 && mVisible.Size() > 0) Selected = 0;
 		TopItem = MAX(0, Selected - listboxRows + 1);
 		UpdateSaveComment();
 	}
@@ -502,7 +627,8 @@ class SaveMenu : LoadSaveMenu
 	{
 		if (manager.RemoveNewSaveNode())
 		{
-			Selected--;
+			RebuildVisible(false);
+			if (Selected > 0) Selected--;
 		}
 		Super.OnDestroy();
 	}
@@ -516,7 +642,7 @@ class SaveMenu : LoadSaveMenu
 	override void TryDeleteMessage()
 	{
 		// cannot delete 'new save game' item
-		if (Selected == 0)
+		if (RawSelected() == 0)
 		{
 			return;
 		}
@@ -537,7 +663,8 @@ class SaveMenu : LoadSaveMenu
 
 		if (mkey == MKEY_Enter)
 		{
-			String SavegameString = (Selected != 0)? manager.GetSavegame(Selected).SaveTitle : "";
+			int raw = RawSelected();
+			String SavegameString = (raw > 0)? manager.GetSavegame(raw).SaveTitle : "";
 			mInput = TextEnterMenu.OpenTextEnter(self, Menu.OptionFont(), SavegameString, -1, fromcontroller);
 			mInput.ActivateMenu();
 			mEntering = true;
@@ -633,7 +760,10 @@ class LoadMenu : LoadSaveMenu
 	override void Init(Menu parent, ListMenuDescriptor desc)
 	{
 		Super.Init(parent, desc);
-		Selected = manager.ExtractSaveData (-1);
+		RebuildVisible(false);
+		int raw = manager.ExtractSaveData(-1);
+		Selected = FindVisibleByRaw(raw);
+		if (Selected < 0 && mVisible.Size() > 0) Selected = 0;
 		TopItem = MAX(0, Selected - listboxRows + 1);
 		UpdateSaveComment();
 	}
@@ -650,14 +780,14 @@ class LoadMenu : LoadSaveMenu
 		{
 			return true;
 		}
-		if (Selected == -1 || manager.SavegameCount() == 0)
+		if (Selected == -1 || mVisible.Size() == 0)
 		{
 			return false;
 		}
 
 		if (mkey == MKEY_Enter)
 		{
-			manager.LoadSavegame(Selected);
+			manager.LoadSavegame(RawSelected());
 			return true;
 		}
 		return false;

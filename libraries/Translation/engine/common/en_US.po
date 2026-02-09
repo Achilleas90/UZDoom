@@ -1977,6 +1977,30 @@ msgstr "Version %s"
 msgid "PICKER_PREFERBACKEND"
 msgstr "Rendering API"
 
+msgid "PICKER_TAB_QUICKSETUP"
+msgstr "Quick Setup"
+
+msgid "PICKER_QUICKSETUP_TITLE"
+msgstr "Quick Setup"
+
+msgid "PICKER_QUICKSETUP_INTRO"
+msgstr "Set your default startup preferences. You can change these anytime in Settings."
+
+msgid "PICKER_QUICKSETUP_FULLSCREEN"
+msgstr "Start in fullscreen"
+
+msgid "PICKER_QUICKSETUP_ASKIWAD"
+msgstr "Ask me to pick IWAD on startup"
+
+msgid "PICKER_QUICKSETUP_AUTOLOAD"
+msgstr "Enable autoload extras"
+
+msgid "PICKER_QUICKSETUP_BACKEND"
+msgstr "Preferred renderer"
+
+msgid "PICKER_QUICKSETUP_SHOWAGAIN"
+msgstr "Show this quick setup on startup"
+
 msgid "PICKER_TAB_PLAY"
 msgstr "Game"
 

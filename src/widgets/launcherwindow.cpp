@@ -27,6 +27,7 @@
 #include "launcherwindow.h"
 #include "networkpage.h"
 #include "playgamepage.h"
+#include "quicksetuppage.h"
 #include "releasepage.h"
 #include "settingspage.h"
 #include "version.h"
@@ -60,6 +61,11 @@ LauncherWindow::LauncherWindow(FStartupSelectionInfo& info) : Widget(nullptr, Wi
 	Settings = new SettingsPage(this, info);
 	Network = new NetworkPage(this, info);
 	About = new AboutPage(this, info);
+	if (info.ShowQuickSetup)
+	{
+		QuickSetup = new QuickSetupPage(this, info);
+		Pages->AddTab(QuickSetup, GStrings.GetString("PICKER_TAB_QUICKSETUP"));
+	}
 
 	if (releasenotes)
 	{
@@ -97,13 +103,16 @@ bool LauncherWindow::IsHosting() const
 
 void LauncherWindow::Start()
 {
+	FString warning;
+	if (!GetLaunchWarning(warning))
+	{
+		Buttonbar->ShowLaunchWarning(warning.GetChars());
+		return;
+	}
+
 	Info->bNetStart = IsInMultiplayer();
 
-	Settings->SetValues(*Info);
-	if (Info->bNetStart)
-		Network->SetValues(*Info);
-	else
-		PlayGame->SetValues(*Info);
+	CaptureInfoFromPages();
 
 	if (Release)
 		Release->SetValues(*Info);
@@ -124,16 +133,86 @@ void LauncherWindow::UpdateLanguage()
 	Pages->SetTabText(Settings, GStrings.GetString("OPTMNU_TITLE"));
 	Pages->SetTabText(Network, GStrings.GetString("PICKER_TAB_MULTI"));
 	Pages->SetTabText(About, GStrings.GetString("PICKER_TAB_ABOUT"));
+	if (QuickSetup) Pages->SetTabText(QuickSetup, GStrings.GetString("PICKER_TAB_QUICKSETUP"));
 	PlayGame->UpdateLanguage();
 	Settings->UpdateLanguage();
 	Network->UpdateLanguage();
 	About->UpdateLanguage();
+	if (QuickSetup) QuickSetup->UpdateLanguage();
 	if (Release)
 	{
 		Pages->SetTabText(Release, GStrings.GetString("PICKER_TAB_RELEASE"));
 		Release->UpdateLanguage();
 	}
 	Buttonbar->UpdateLanguage();
+}
+
+void LauncherWindow::CaptureInfoFromPages()
+{
+	Info->bNetStart = IsInMultiplayer();
+	if (QuickSetup)
+	{
+		QuickSetup->SetValues(*Info);
+	}
+	Settings->SetValues(*Info);
+	if (Info->bNetStart)
+		Network->SetValues(*Info);
+	else
+		PlayGame->SetValues(*Info);
+}
+
+void LauncherWindow::ApplyInfoToPages()
+{
+	PlayGame->ApplyValues(*Info);
+	Settings->ApplyValues(*Info);
+	Network->ApplyValues(*Info);
+	if (QuickSetup) QuickSetup->ApplyValues(*Info);
+	Buttonbar->UpdateLanguage();
+}
+
+void LauncherWindow::ApplyProfile(int index)
+{
+	CaptureInfoFromPages();
+	Info->ApplyProfile(index);
+	ApplyInfoToPages();
+}
+
+void LauncherWindow::DuplicateProfile()
+{
+	CaptureInfoFromPages();
+	Info->DuplicateActiveProfile();
+	ApplyInfoToPages();
+}
+
+void LauncherWindow::NewProfile()
+{
+	CaptureInfoFromPages();
+	FStartupProfile p = Info->Profiles[Info->ActiveProfile];
+	p.Name = "New Profile";
+	Info->ActiveProfile = Info->Profiles.Push(p);
+	Info->SaveActiveProfile();
+	ApplyInfoToPages();
+}
+
+void LauncherWindow::DeleteProfile()
+{
+	CaptureInfoFromPages();
+	Info->DeleteActiveProfile();
+	ApplyInfoToPages();
+}
+
+FString LauncherWindow::GetCommandPreview()
+{
+	Info->bNetStart = IsInMultiplayer();
+	CaptureInfoFromPages();
+	return Info->BuildCommandPreview();
+}
+
+bool LauncherWindow::GetLaunchWarning(FString& warning)
+{
+	Info->bNetStart = IsInMultiplayer();
+	CaptureInfoFromPages();
+	return Info->ValidateSelection(warning);
 }
 
 void LauncherWindow::OnClose()

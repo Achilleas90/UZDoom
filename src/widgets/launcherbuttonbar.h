@@ -21,12 +21,14 @@
 
 class LauncherWindow;
 class PushButton;
+class LineEdit;
 
 class LauncherButtonbar : public Widget
 {
 public:
 	LauncherButtonbar(LauncherWindow* parent);
 	void UpdateLanguage();
+	void ShowLaunchWarning(const std::string& warning);
 
 	double GetPreferredHeight() const;
 
@@ -34,9 +36,12 @@ private:
 	void OnGeometryChanged() override;
 	void OnPlayButtonClicked();
 	void OnExitButtonClicked();
+	void OnCopyButtonClicked();
 
 	LauncherWindow* GetLauncher() const;
 
 	PushButton* PlayButton = nullptr;
 	PushButton* ExitButton = nullptr;
+	PushButton* CopyButton = nullptr;
+	LineEdit* PreviewEdit = nullptr;
 };

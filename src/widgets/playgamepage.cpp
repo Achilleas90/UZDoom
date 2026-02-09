@@ -36,10 +36,6 @@ PlayGamePage::PlayGamePage(LauncherWindow* launcher, const FStartupSelectionInfo
 	ParametersEdit = new LineEdit(this);
 	SaveArgsCheckbox = new CheckboxLabel(this);
 
-	SaveArgsCheckbox->SetChecked(info.bSaveArgs);
-	if (!info.DefaultArgs.IsEmpty())
-		ParametersEdit->SetText(info.DefaultArgs.GetChars());
-
 	for (const auto& wad : *info.Wads)
 	{
 		const char* filepart = strrchr(wad.Path.GetChars(), '/');
@@ -57,13 +53,12 @@ PlayGamePage::PlayGamePage(LauncherWindow* launcher, const FStartupSelectionInfo
 		GamesList->AddItem(work.GetChars());
 	}
 
-	if (info.DefaultIWAD >= 0 && info.DefaultIWAD < info.Wads->SSize())
-	{
-		GamesList->SetSelectedItem(info.DefaultIWAD);
-		GamesList->ScrollToItem(info.DefaultIWAD);
-	}
-
 	GamesList->OnActivated = [=]() { OnGamesListActivated(); };
+	GamesList->OnChanged = [=](int) { Launcher->UpdatePlayButton(); };
+	ParametersEdit->FuncAfterEditChanged = [=]() { Launcher->UpdatePlayButton(); };
+	SaveArgsCheckbox->FuncChanged = [=](bool) { Launcher->UpdatePlayButton(); };
+
+	ApplyValues(info);
 }
 
 void PlayGamePage::SetValues(FStartupSelectionInfo& info) const
@@ -71,6 +66,19 @@ void PlayGamePage::SetValues(FStartupSelectionInfo& info) const
 	info.DefaultIWAD = GamesList->GetSelectedItem();
 	info.DefaultArgs = ParametersEdit->GetText();
 	info.bSaveArgs = SaveArgsCheckbox->GetChecked();
+}
+
+void PlayGamePage::ApplyValues(const FStartupSelectionInfo& info)
+{
+	SaveArgsCheckbox->SetChecked(info.bSaveArgs);
+	ParametersEdit->SetText(info.DefaultArgs.GetChars());
+
+	if (info.DefaultIWAD >= 0 && info.DefaultIWAD < info.Wads->SSize())
+	{
+		GamesList->SetSelectedItem(info.DefaultIWAD);
+		GamesList->ScrollToItem(info.DefaultIWAD);
+	}
+	Launcher->UpdatePlayButton();
 }
 
 void PlayGamePage::UpdateLanguage()

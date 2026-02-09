@@ -79,6 +79,40 @@ struct WadStuff
 	FString Name;
 };
 
+struct FStartupProfile
+{
+	FString Name = "Default";
+
+	FString IWADName = {};
+	FString Args = {};
+	bool SaveArgs = true;
+
+	int StartFlags = 0;
+	bool QueryIWAD = true;
+	FString Language = "auto";
+	int Backend = 1;
+	bool Fullscreen = true;
+	int FileLoadBehaviour = 0;
+	bool NotifyNewRelease = true;
+
+	FString NetIWADName = {};
+	int NetPage = 0;
+	FString NetArgs = {};
+	bool SaveNetFile = false;
+	bool SaveNetArgs = true;
+	FString NetSaveFile = {};
+	int NetHostTeam = 255;
+	int NetPlayers = 8;
+	int NetHostPort = 0;
+	int NetTicDup = 0;
+	bool NetExtraTic = false;
+	int NetGameMode = 0;
+	bool NetAltDM = false;
+	FString NetAddress = {};
+	int NetJoinPort = 0;
+	int NetJoinTeam = 255;
+};
+
 struct FStartupSelectionInfo
 {
 	const TArray<WadStuff>* Wads = nullptr;
@@ -98,6 +132,7 @@ struct FStartupSelectionInfo
 	bool DefaultFullscreen = true;
 	int DefaultFileLoadBehaviour = 0;
 	bool notifyNewRelease = true;
+	bool ShowQuickSetup = true;
 
 	// Net game info
 	int DefaultNetIWAD = 0;
@@ -121,9 +156,19 @@ struct FStartupSelectionInfo
 	int DefaultNetJoinPort = 0;
 	int DefaultNetJoinTeam = 255;
 
+	TArray<FStartupProfile> Profiles = {};
+	int ActiveProfile = 0;
+	TArray<FString> RecentJoinEndpoints = {};
+
 	FStartupSelectionInfo() = delete;
 	FStartupSelectionInfo(const TArray<WadStuff>& wads, FArgs& args, int startFlags);
 	int SaveInfo();
+	void ApplyProfile(int index);
+	void SaveActiveProfile();
+	int DuplicateActiveProfile();
+	bool DeleteActiveProfile();
+	FString BuildCommandPreview() const;
+	bool ValidateSelection(FString& warning) const;
 };
 
 

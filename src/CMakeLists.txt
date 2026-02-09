@@ -972,6 +972,7 @@ set (PCH_SOURCES
 	widgets/netstartwindow.cpp
 	widgets/networkpage.cpp
 	widgets/playgamepage.cpp
+	widgets/quicksetuppage.cpp
 	widgets/releasepage.cpp
 	widgets/settingspage.cpp
 	widgets/themedata.cpp
