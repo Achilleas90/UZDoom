@@ -5180,3 +5180,72 @@ msgstr ""
 
 msgid "OPTMNU_ACCESSIBILITY"
 msgstr ""
+
+msgid "OPTMNU_TOOLTIP_SHOWADVANCED"
+msgstr ""
+
+msgid "OPTMNU_TOOLTIP_ENABLE_MOUSE"
+msgstr ""
+
+msgid "OPTMNU_TOOLTIP_MOUSE_SENS"
+msgstr ""
+
+msgid "OPTMNU_TOOLTIP_MOUSE_TURN"
+msgstr ""
+
+msgid "OPTMNU_TOOLTIP_FREELOOK"
+msgstr ""
+
+msgid "OPTMNU_TOOLTIP_ENABLE_JOYSTICK"
+msgstr ""
+
+msgid "OPTMNU_TOOLTIP_PAD_TURN"
+msgstr ""
+
+msgid "OPTMNU_TOOLTIP_IMAGE_ADJUST"
+msgstr ""
+
+msgid "OPTMNU_TOOLTIP_SCREEN_SIZE"
+msgstr ""
+
+msgid "OPTMNU_TOOLTIP_FOV"
+msgstr ""
+
+msgid "OPTMNU_TOOLTIP_CROSSHAIR"
+msgstr ""
+
+msgid "OPTMNU_TOOLTIP_VIEW_BOB"
+msgstr ""
+
+msgid "OPTMNU_TOOLTIP_SMART_AUTOAIM"
+msgstr ""
+
+msgid "OPTMNU_TOOLTIP_PISTOLSTART"
+msgstr ""
+
+msgid "OPTMNU_TOOLTIP_COMPAT_MODE"
+msgstr ""
+
+msgid "OPTMNU_TOOLTIP_MASTER_VOLUME"
+msgstr ""
+
+msgid "OPTMNU_TOOLTIP_SAMPLE_RATE"
+msgstr ""
+
+msgid "OPTMNU_TOOLTIP_QUERY_IWAD"
+msgstr ""
+
+msgid "OPTMNU_TOOLTIP_AUTOSAVE"
+msgstr ""
+
+msgid "OPTMNU_TOOLTIP_RENDER_BACKEND"
+msgstr ""
+
+msgid "OPTMNU_TOOLTIP_VSYNC"
+msgstr ""
+
+msgid "OPTMNU_TOOLTIP_FULLSCREEN"
+msgstr ""
+
+msgid "OPTMNU_TOOLTIP_LANGUAGE"
+msgstr ""

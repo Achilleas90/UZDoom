@@ -5394,3 +5394,72 @@ msgstr "Contrast"
 
 msgid "DSPLYMNU_SATURATION"
 msgstr "Saturation"
+
+msgid "OPTMNU_TOOLTIP_SHOWADVANCED"
+msgstr "Enable this to reveal expert and low-impact settings."
+
+msgid "OPTMNU_TOOLTIP_ENABLE_MOUSE"
+msgstr "Turn mouse input on or off for gameplay."
+
+msgid "OPTMNU_TOOLTIP_MOUSE_SENS"
+msgstr "Adjust how much camera movement you get from mouse movement."
+
+msgid "OPTMNU_TOOLTIP_MOUSE_TURN"
+msgstr "Horizontal mouse look speed while turning."
+
+msgid "OPTMNU_TOOLTIP_FREELOOK"
+msgstr "Allows looking up and down freely without holding a key."
+
+msgid "OPTMNU_TOOLTIP_ENABLE_JOYSTICK"
+msgstr "Turn gamepad and joystick input on or off."
+
+msgid "OPTMNU_TOOLTIP_PAD_TURN"
+msgstr "Controls analog turning speed on gamepad."
+
+msgid "OPTMNU_TOOLTIP_IMAGE_ADJUST"
+msgstr "Fine-tune gamma, brightness, contrast, and saturation."
+
+msgid "OPTMNU_TOOLTIP_SCREEN_SIZE"
+msgstr "Changes the gameplay viewport size relative to the HUD."
+
+msgid "OPTMNU_TOOLTIP_FOV"
+msgstr "Higher values show more of the world but can look distorted."
+
+msgid "OPTMNU_TOOLTIP_CROSSHAIR"
+msgstr "Shows an aiming crosshair on screen."
+
+msgid "OPTMNU_TOOLTIP_VIEW_BOB"
+msgstr "Controls camera bobbing while moving."
+
+msgid "OPTMNU_TOOLTIP_SMART_AUTOAIM"
+msgstr "Makes autoaim prefer the most relevant nearby target."
+
+msgid "OPTMNU_TOOLTIP_PISTOLSTART"
+msgstr "Start each level with only your default loadout."
+
+msgid "OPTMNU_TOOLTIP_COMPAT_MODE"
+msgstr "Choose gameplay compatibility behavior for classic mods."
+
+msgid "OPTMNU_TOOLTIP_MASTER_VOLUME"
+msgstr "Overall volume for all game audio."
+
+msgid "OPTMNU_TOOLTIP_SAMPLE_RATE"
+msgstr "Higher sample rates can improve quality but use more CPU."
+
+msgid "OPTMNU_TOOLTIP_QUERY_IWAD"
+msgstr "Ask which base game to launch when multiple IWADs are found."
+
+msgid "OPTMNU_TOOLTIP_AUTOSAVE"
+msgstr "Controls when automatic saves are created."
+
+msgid "OPTMNU_TOOLTIP_RENDER_BACKEND"
+msgstr "Choose the graphics API used by the renderer."
+
+msgid "OPTMNU_TOOLTIP_VSYNC"
+msgstr "Synchronize frames to your display to reduce tearing."
+
+msgid "OPTMNU_TOOLTIP_FULLSCREEN"
+msgstr "Switches between fullscreen and windowed mode."
+
+msgid "OPTMNU_TOOLTIP_LANGUAGE"
+msgstr "Change the language used in menus and interface text."

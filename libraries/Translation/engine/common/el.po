@@ -2127,3 +2127,12 @@ msgstr "Ταχύτητα κοιτάγματος"
 
 msgid "JOYMNU_ANALOGSTRAFERUN"
 msgstr "Αναλογικό strafe run"
+
+msgid "OPTMNU_SHOWADVANCED"
+msgstr "Εμφάνιση προηγμένων ρυθμίσεων"
+
+msgid "OPTMNU_QUICKSETTINGS"
+msgstr "Γρήγορες ρυθμίσεις"
+
+msgid "OPTMNU_CATEGORIES"
+msgstr "Κατηγορίες"

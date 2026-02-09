@@ -1298,7 +1298,8 @@ static void ParseOptionMenu(FScanner &sc)
 	sc.MustGetString();
 
 	DOptionMenuDescriptor *desc = Create<DOptionMenuDescriptor>();
-	desc->mFont = BigUpper;
+	// Use the larger option font by default for better readability.
+	desc->mFont = BigFont;
 	desc->mTooltipFont = DefaultOptionMenuSettings->mTooltipFont;
 	desc->mMenuName = sc.String;
 	desc->mSelectedItem = -1;
@@ -1621,7 +1622,8 @@ void M_ParseMenuDefs()
 	DefaultOptionMenuSettings = Create<DOptionMenuDescriptor>();
 	DefaultListMenuSettings->Reset();
 	DefaultOptionMenuSettings->Reset();
-	OptionSettings.mLinespacing = 17;
+	// Increased spacing to match larger option font and improve readability.
+	OptionSettings.mLinespacing = 24;
 
 	int IWADMenu = fileSystem.CheckNumForName("MENUDEF", FileSys::ns_global, fileSystem.GetIwadNum());
 

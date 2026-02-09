@@ -2143,3 +2143,12 @@ msgstr ""
 
 msgid "PICKER_TAB_RELEASE"
 msgstr ""
+
+msgid "OPTMNU_SHOWADVANCED"
+msgstr ""
+
+msgid "OPTMNU_QUICKSETTINGS"
+msgstr ""
+
+msgid "OPTMNU_CATEGORIES"
+msgstr ""

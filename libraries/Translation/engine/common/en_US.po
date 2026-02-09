@@ -2171,3 +2171,12 @@ msgstr "About"
 
 msgid "PICKER_TAB_RELEASE"
 msgstr "Release Notes"
+
+msgid "OPTMNU_SHOWADVANCED"
+msgstr "Show advanced settings"
+
+msgid "OPTMNU_QUICKSETTINGS"
+msgstr "Quick settings"
+
+msgid "OPTMNU_CATEGORIES"
+msgstr "Categories"

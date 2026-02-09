@@ -5172,3 +5172,72 @@ msgstr ""
 
 msgid "DSPLYMNU_BRIGHTNESS"
 msgstr "Φωτηνότητα"
+
+msgid "OPTMNU_TOOLTIP_SHOWADVANCED"
+msgstr "Ενεργοποιήστε το για να εμφανίζονται προχωρημένες και χαμηλής επίδρασης ρυθμίσεις."
+
+msgid "OPTMNU_TOOLTIP_ENABLE_MOUSE"
+msgstr "Ενεργοποιεί ή απενεργοποιεί το ποντίκι στο παιχνίδι."
+
+msgid "OPTMNU_TOOLTIP_MOUSE_SENS"
+msgstr "Ρυθμίζει πόσο κινείται η κάμερα με την κίνηση του ποντικιού."
+
+msgid "OPTMNU_TOOLTIP_MOUSE_TURN"
+msgstr "Ταχύτητα οριζόντιας στροφής με το ποντίκι."
+
+msgid "OPTMNU_TOOLTIP_FREELOOK"
+msgstr "Επιτρέπει ελεύθερο κοίταγμα πάνω-κάτω χωρίς κράτημα πλήκτρου."
+
+msgid "OPTMNU_TOOLTIP_ENABLE_JOYSTICK"
+msgstr "Ενεργοποιεί ή απενεργοποιεί χειριστήριο και joystick."
+
+msgid "OPTMNU_TOOLTIP_PAD_TURN"
+msgstr "Ρυθμίζει την αναλογική ταχύτητα στροφής στο χειριστήριο."
+
+msgid "OPTMNU_TOOLTIP_IMAGE_ADJUST"
+msgstr "Λεπτομερής ρύθμιση gamma, φωτεινότητας, αντίθεσης και κορεσμού."
+
+msgid "OPTMNU_TOOLTIP_SCREEN_SIZE"
+msgstr "Αλλάζει το μέγεθος της περιοχής προβολής σε σχέση με το HUD."
+
+msgid "OPTMNU_TOOLTIP_FOV"
+msgstr "Μεγαλύτερες τιμές δείχνουν περισσότερο χώρο αλλά μπορεί να παραμορφώνουν."
+
+msgid "OPTMNU_TOOLTIP_CROSSHAIR"
+msgstr "Εμφανίζει σταυρόνημα στόχευσης στην οθόνη."
+
+msgid "OPTMNU_TOOLTIP_VIEW_BOB"
+msgstr "Ελέγχει το κούνημα της κάμερας κατά την κίνηση."
+
+msgid "OPTMNU_TOOLTIP_SMART_AUTOAIM"
+msgstr "Κάνει το autoaim να προτιμά τον πιο σχετικό κοντινό στόχο."
+
+msgid "OPTMNU_TOOLTIP_PISTOLSTART"
+msgstr "Ξεκινά κάθε επίπεδο μόνο με τον βασικό εξοπλισμό."
+
+msgid "OPTMNU_TOOLTIP_COMPAT_MODE"
+msgstr "Επιλέξτε συμπεριφορά συμβατότητας για κλασικά mods."
+
+msgid "OPTMNU_TOOLTIP_MASTER_VOLUME"
+msgstr "Συνολική ένταση για όλους τους ήχους του παιχνιδιού."
+
+msgid "OPTMNU_TOOLTIP_SAMPLE_RATE"
+msgstr "Υψηλότερο sample rate μπορεί να βελτιώσει την ποιότητα αλλά αυξάνει το CPU load."
+
+msgid "OPTMNU_TOOLTIP_QUERY_IWAD"
+msgstr "Ζητά επιλογή βασικού IWAD όταν υπάρχουν περισσότερα από ένα."
+
+msgid "OPTMNU_TOOLTIP_AUTOSAVE"
+msgstr "Ορίζει πότε δημιουργούνται αυτόματες αποθηκεύσεις."
+
+msgid "OPTMNU_TOOLTIP_RENDER_BACKEND"
+msgstr "Επιλέξτε το API γραφικών που θα χρησιμοποιήσει ο renderer."
+
+msgid "OPTMNU_TOOLTIP_VSYNC"
+msgstr "Συγχρονίζει τα frames με την οθόνη για μείωση του tearing."
+
+msgid "OPTMNU_TOOLTIP_FULLSCREEN"
+msgstr "Εναλλάσσει μεταξύ πλήρους οθόνης και παραθύρου."
+
+msgid "OPTMNU_TOOLTIP_LANGUAGE"
+msgstr "Αλλάζει τη γλώσσα των μενού και του περιβάλλοντος."

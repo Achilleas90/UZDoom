@@ -78,6 +78,7 @@ EXTERN_CVAR(Float, r_visibility)
 
 CVAR(Bool, m_simpleoptions, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
 CVAR(Bool, m_simpleoptions_view, true, 0);
+CVAR(Bool, m_showadvanced, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
 
 typedef void(*hfunc)();
 DMenu* CreateMessageBoxMenu(DMenu* parent, const char* message, int messagemode, bool playsound, FName action = NAME_None, hfunc handler = nullptr);
@@ -269,17 +270,24 @@ bool M_SetSpecialMenu(FName& menu, int param)
 		break;
 
 	case NAME_OptionsMenu:
-		if (m_simpleoptions_view != m_simpleoptions)
-			m_simpleoptions_view->SetGenericRep(m_simpleoptions->ToInt(), CVAR_Bool);
-		if (m_simpleoptions) menu = NAME_OptionsMenuSimple;
+		// Keep legacy simple/full settings in sync while using the unified options menu as default.
+		if (m_showadvanced == m_simpleoptions)
+			m_showadvanced->SetGenericRep(!m_simpleoptions->ToInt(), CVAR_Bool);
+		if (m_simpleoptions_view != m_showadvanced)
+			m_simpleoptions_view->SetGenericRep(m_showadvanced->ToInt(), CVAR_Bool);
 		break;
 
 	case NAME_OptionsMenuSimple:
-		if (!m_simpleoptions_view) m_simpleoptions_view->SetGenericRep(true, CVAR_Bool);
+		if (!m_showadvanced) m_showadvanced->SetGenericRep(false, CVAR_Bool);
+		if (m_simpleoptions_view != m_showadvanced)
+			m_simpleoptions_view->SetGenericRep(m_showadvanced->ToInt(), CVAR_Bool);
+		menu = NAME_OptionsMenu;
 		break;
 
 	case NAME_OptionsMenuFull:
-		if (m_simpleoptions_view) m_simpleoptions_view->SetGenericRep(false, CVAR_Bool);
+		if (!m_showadvanced) m_showadvanced->SetGenericRep(true, CVAR_Bool);
+		if (m_simpleoptions_view != m_showadvanced)
+			m_simpleoptions_view->SetGenericRep(m_showadvanced->ToInt(), CVAR_Bool);
 		menu = NAME_OptionsMenu;
 		break;
 
