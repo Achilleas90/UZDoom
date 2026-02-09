@@ -390,6 +390,8 @@ public:
 	bool		waiting = 0;
 	int			killcount = 0, itemcount = 0, secretcount = 0;		// for intermission
 	uint32_t	damagecount = 0, bonuscount = 0;// for screen flashing
+	int			hitconfirmtic = 0;			// local gameplay feedback: successful hit time
+	int			killconfirmtic = 0;			// local gameplay feedback: kill-confirm time
 	int			hazardcount = 0;			// for delayed Strife damage
 	int			hazardinterval = 0;			// Frequency of damage infliction
 	FName		hazardtype = NAME_None;				// Damage type of last hazardous damage encounter.

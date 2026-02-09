@@ -52,6 +52,7 @@
 #include "events.h"
 #include "actorinlines.h"
 #include "d_main.h"
+#include "s_doomsound.h"
 
 static FRandom pr_botrespawn ("BotRespawn");
 static FRandom pr_killmobj ("ActorDie");
@@ -62,6 +63,12 @@ static FRandom pr_switcher ("SwitchTarget");
 
 CVAR (Bool, cl_showsprees, true, CVAR_ARCHIVE)
 CVAR (Bool, cl_showmultikills, true, CVAR_ARCHIVE)
+CVAR(Bool, cl_hitconfirm_sound, false, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
+CUSTOM_CVAR(Float, cl_hitconfirm_sound_volume, 0.35f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
+{
+	if (self < 0.0f) self = 0.0f;
+	else if (self > 1.0f) self = 1.0f;
+}
 EXTERN_CVAR (Bool, show_obituaries)
 
 CVAR (Float, sv_damagefactormobj, 1.0, CVAR_SERVERINFO|CVAR_CHEAT)
@@ -1557,6 +1564,24 @@ static int DoDamageMobj(AActor *target, AActor *inflictor, AActor *source, int d
 	// [ZZ] event handlers need the result.
 	bool needevent = true;
 	int realdamage = DamageMobj(target, inflictor, source, damage, mod, flags, angle, needevent);
+
+	if (realdamage > 0 && source != nullptr && source->player != nullptr && source != target)
+	{
+		source->player->hitconfirmtic = gametic;
+		const bool killConfirm = target != nullptr && target->health <= 0;
+		if (killConfirm)
+		{
+			source->player->killconfirmtic = gametic;
+		}
+
+		if (cl_hitconfirm_sound && source->player == &players[consoleplayer])
+		{
+			const char* cue = killConfirm ? "misc/secret" : "menu/change";
+			const float cueVolume = killConfirm ? clamp(cl_hitconfirm_sound_volume * 1.35f, 0.f, 1.f) : cl_hitconfirm_sound_volume;
+			S_Sound(CHAN_AUTO, CHANF_UI | CHANF_NORUMBLE, cue, cueVolume, ATTN_NONE);
+		}
+	}
+
 	if (realdamage >= 0) //Keep this check separated. Mods relying upon negative numbers may break otherwise.
 		CallReactToDamage(target, inflictor, source, realdamage, mod, flags, damage);
 

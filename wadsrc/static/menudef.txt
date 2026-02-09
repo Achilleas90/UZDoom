@@ -1019,6 +1019,8 @@ OptionMenu "VideoOptions" protected
 	Submenu "$DSPLYMNU_VKOPT",			"VKOptions"
 	Submenu "$GLMNU_TEXOPT", 			"GLTextureGLOptions"
 	Submenu "$GLMNU_DYNLIGHT",			"GLLightOptions"
+	Slider "Dynamic Light Intensity",	"r_dynlightintensity", 0.0, 4.0, 0.1, 1
+	Tooltip "Scales brightness of dynamic lights globally."
 	StaticText " "
 	Slider "$DSPLYMNU_SCREENSIZE",				"screenblocks", 				3.0, 12.0, 1.0, 0
 	Tooltip "$OPTMNU_TOOLTIP_SCREEN_SIZE"
@@ -1161,6 +1163,15 @@ OptionMenu "HUDOptions" protected
 	ColorPicker "$HUDMNU_CROSSHAIRCOLOR", 	"crosshaircolor"
 	Option "$HUDMNU_CROSSHAIRHEALTH",		"crosshairhealth", "CrosshairHealthTypes", "m_showadvanced", 0, 0, Hide
 	Slider "$HUDMNU_CROSSHAIRSCALE",		"crosshairscale", 0.0, 2.0, 0.05, 2, "m_showadvanced", 0, Hide
+	Option "Hit Confirm Marker",			"cl_hitconfirm", "OnOff"
+	Tooltip "Draws a short marker around the crosshair when your attacks deal damage."
+	Slider "Hit Confirm Duration",			"cl_hitconfirm_duration", 0.03, 0.60, 0.01, 2, "cl_hitconfirm"
+	Slider "Kill Confirm Duration",			"cl_killconfirm_duration", 0.03, 0.80, 0.01, 2, "cl_hitconfirm"
+	ColorPicker "Hit Confirm Color",		"cl_hitconfirm_color", "cl_hitconfirm"
+	ColorPicker "Kill Confirm Color",		"cl_killconfirm_color", "cl_hitconfirm"
+	Option "Hit Confirm Sound",				"cl_hitconfirm_sound", "OnOff", "cl_hitconfirm"
+	Slider "Hit Sound Volume",				"cl_hitconfirm_sound_volume", 0.0, 1.0, 0.05, 2, "cl_hitconfirm_sound"
+	Tooltip "Plays a subtle cue when dealing damage, and a stronger cue on kill confirms."
 	StaticText " "
 	Option "$HUDMNU_NAMETAGS",				"displaynametags", "DisplayTagsTypes"
 	Option "$HUDMNU_NAMETAGCOLOR",			"nametagcolor", "TextColors", "displaynametags"
@@ -2955,6 +2966,8 @@ OptionMenu "GLLightOptions" protected
 	Title "$GLLIGHTMNU_TITLE"
 	Option "$TCMNU_DYNLIGHTS",					"r_dynlights", "OnOff"
 	Option "$GLLIGHTMNU_LIGHTSENABLED",			gl_lights,				"OnOff"
+	Slider "Dynamic Light Intensity",			"r_dynlightintensity", 0.0, 4.0, 0.1, 1
+	Tooltip "Scales brightness of dynamic lights globally."
 	Option "$GLLIGHTMNU_LIGHTSPRITES",			gl_light_sprites,		"YesNo"
 	Option "$GLLIGHTMNU_LIGHTPARTICLES",		gl_light_particles,		"YesNo"
 	Option "$GLLIGHTMNU_LIGHTSHADOWMAP",		gl_light_shadowmap,		"YesNo"

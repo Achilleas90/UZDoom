@@ -71,6 +71,12 @@ CUSTOM_CVAR (Bool, gl_lights, true, CVAR_ARCHIVE | CVAR_GLOBALCONFIG | CVAR_NOIN
 	}
 }
 
+CUSTOM_CVAR (Float, r_dynlightintensity, 1.0f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
+{
+	if (self < 0.0f) self = 0.0f;
+	else if (self > 4.0f) self = 4.0f;
+}
+
 CUSTOM_CVAR(Int, sv_corpsequeuesize, 64, CVAR_ARCHIVE|CVAR_SERVERINFO|CVAR_NOINITCALL)
 {
 	if (self > 0)

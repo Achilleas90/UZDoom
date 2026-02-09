@@ -205,6 +205,8 @@ struct FLightNode
 	FDynamicLight * lightsource;
 };
 
+EXTERN_CVAR(Float, r_dynlightintensity)
+
 struct FDynamicLightTouchLists
 {
 	TArray<FSection*> flat_tlist;
@@ -233,12 +235,20 @@ struct FDynamicLight
 		m_off = pos;
 	}
 
+	int GetScaledColor(int idx) const
+	{
+		double scaled = pArgs[idx] * r_dynlightintensity;
+		if (scaled <= 0) return 0;
+		int value = int(scaled + 0.5);
+		if (value > 255) return 255;
+		return value;
+	}
 
 	bool IsActive() const { return m_active; }
 	float GetRadius() const { return (IsActive() ? m_currentRadius * 2.f : 0.f); }
-	int GetRed() const { return pArgs[LIGHT_RED]; }
-	int GetGreen() const { return pArgs[LIGHT_GREEN]; }
-	int GetBlue() const { return pArgs[LIGHT_BLUE]; }
+	int GetRed() const { return GetScaledColor(LIGHT_RED); }
+	int GetGreen() const { return GetScaledColor(LIGHT_GREEN); }
+	int GetBlue() const { return GetScaledColor(LIGHT_BLUE); }
 	int GetIntensity() const { return pArgs[LIGHT_INTENSITY]; }
 	int GetSecondaryIntensity() const { return pArgs[LIGHT_SECONDARY_INTENSITY]; }
 	double GetLightDefIntensity() const { return lightDefIntensity; }
@@ -308,5 +318,4 @@ public:
 
 	FDynamicLightTouchLists touchlists;
 };
-
 

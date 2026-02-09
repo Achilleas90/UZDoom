@@ -114,6 +114,19 @@ EXTERN_CVAR(Bool, hud_aspectscale)
 CVAR (Bool, crosshairon, true, CVAR_ARCHIVE);
 CVAR (Int, crosshair, 0, CVAR_ARCHIVE)
 CVAR (Bool, crosshairforce, false, CVAR_ARCHIVE)
+CVAR(Bool, cl_hitconfirm, true, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
+CVAR(Color, cl_hitconfirm_color, 0xffffff, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
+CVAR(Color, cl_killconfirm_color, 0x7fd8ff, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
+CUSTOM_CVAR(Float, cl_hitconfirm_duration, 0.16f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
+{
+	if (self < 0.03f) self = 0.03f;
+	else if (self > 0.60f) self = 0.60f;
+}
+CUSTOM_CVAR(Float, cl_killconfirm_duration, 0.28f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
+{
+	if (self < 0.03f) self = 0.03f;
+	else if (self > 0.80f) self = 0.80f;
+}
 CUSTOM_CVAR(Int, am_showmaplabel, 2, CVAR_ARCHIVE)
 {
 	if (self < 0 || self > 2) self = 2;
@@ -1021,6 +1034,42 @@ void DBaseStatusBar::DrawCrosshair (double ticFrac)
 
 	const double size = PrevCrosshairSize * (1.0 - ticFrac) + CrosshairSize * ticFrac;
 	ST_DrawCrosshair(health, viewwidth / 2 + viewwindowx, viewheight / 2 + viewwindowy, size);
+
+	if (cl_hitconfirm && CPlayer != nullptr)
+	{
+		const double now = gametic + ticFrac;
+		const double hitAge = now - CPlayer->hitconfirmtic;
+		const double killAge = now - CPlayer->killconfirmtic;
+		const bool drawKill = CPlayer->killconfirmtic > 0 && killAge <= cl_killconfirm_duration * TICRATE;
+		const bool drawHit = !drawKill && CPlayer->hitconfirmtic > 0 && hitAge <= cl_hitconfirm_duration * TICRATE;
+		if (drawHit || drawKill)
+		{
+			const double duration = (drawKill ? cl_killconfirm_duration : cl_hitconfirm_duration) * TICRATE;
+			const double age = drawKill ? killAge : hitAge;
+			const double fade = clamp(1.0 - (age / max(1.0, duration)), 0.0, 1.0);
+			const uint8_t alpha = uint8_t(clamp(0.35 + fade * 0.65, 0.0, 1.0) * 255.0);
+			const uint32_t markerColor = drawKill ? uint32_t(int(cl_killconfirm_color)) : uint32_t(int(cl_hitconfirm_color));
+			const int centerX = viewwidth / 2 + viewwindowx;
+			const int centerY = viewheight / 2 + viewwindowy;
+			const double base = max(10.0, size * 22.0);
+			const double gap = base * 0.50;
+			const double arm = drawKill ? (base * 1.35) : base;
+			const uint32_t linecolor = (markerColor & 0x00ffffff) | MAKEARGB(255, 0, 0, 0);
+			const DVector2 center(centerX, centerY);
+
+			auto drawThickLine = [&](const DVector2& a, const DVector2& b, const DVector2& normal)
+			{
+				twod->AddLine(a, b, nullptr, linecolor, alpha);
+				twod->AddLine(a + normal, b + normal, nullptr, linecolor, alpha);
+				twod->AddLine(a - normal, b - normal, nullptr, linecolor, alpha);
+			};
+
+			drawThickLine(center + DVector2(-gap, -gap), center + DVector2(-gap - arm, -gap - arm), DVector2(1.0, -1.0));
+			drawThickLine(center + DVector2(+gap, -gap), center + DVector2(+gap + arm, -gap - arm), DVector2(1.0, 1.0));
+			drawThickLine(center + DVector2(-gap, +gap), center + DVector2(-gap - arm, +gap + arm), DVector2(1.0, 1.0));
+			drawThickLine(center + DVector2(+gap, +gap), center + DVector2(+gap + arm, +gap + arm), DVector2(1.0, -1.0));
+		}
+	}
 }
 
 static void DrawCrosshair(DBaseStatusBar* self, double ticFrac)
@@ -1473,4 +1522,3 @@ int GetInventoryIcon(AActor *item, uint32_t flags, int *applyscale)
 	}
 	return picnum.GetIndex();
 }
-

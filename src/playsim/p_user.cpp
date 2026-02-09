@@ -577,6 +577,8 @@ void player_t::CopyFrom(player_t &p)
 	secretcount = p.secretcount;
 	damagecount = p.damagecount;
 	bonuscount = p.bonuscount;
+	hitconfirmtic = p.hitconfirmtic;
+	killconfirmtic = p.killconfirmtic;
 	hazardcount = p.hazardcount;
 	hazardtype = p.hazardtype;
 	hazardinterval = p.hazardinterval;
@@ -1971,6 +1973,8 @@ void player_t::Serialize(FSerializer &arc)
 		("secretcount", secretcount)
 		("damagecount", damagecount)
 		("bonuscount", bonuscount)
+		("hitconfirmtic", hitconfirmtic)
+		("killconfirmtic", killconfirmtic)
 		("hazardcount", hazardcount)
 		("poisoncount", poisoncount)
 		("poisoner", poisoner)
@@ -2098,6 +2102,8 @@ DEFINE_FIELD_X(PlayerInfo, player_t, itemcount)
 DEFINE_FIELD_X(PlayerInfo, player_t, secretcount)
 DEFINE_FIELD_X(PlayerInfo, player_t, damagecount)
 DEFINE_FIELD_X(PlayerInfo, player_t, bonuscount)
+DEFINE_FIELD_X(PlayerInfo, player_t, hitconfirmtic)
+DEFINE_FIELD_X(PlayerInfo, player_t, killconfirmtic)
 DEFINE_FIELD_X(PlayerInfo, player_t, hazardcount)
 DEFINE_FIELD_X(PlayerInfo, player_t, hazardinterval)
 DEFINE_FIELD_X(PlayerInfo, player_t, hazardtype)
