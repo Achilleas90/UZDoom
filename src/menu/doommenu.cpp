@@ -75,6 +75,10 @@ EXTERN_CVAR(Bool, m_tooltip_capwidth)
 EXTERN_CVAR(Bool, m_tooltip_small)
 EXTERN_CVAR(Int, r_extralight)
 EXTERN_CVAR(Float, r_visibility)
+EXTERN_CVAR(Bool, r_flashlight)
+EXTERN_CVAR(Int, r_flashlight_intensity)
+EXTERN_CVAR(Float, r_flashlight_innerangle)
+EXTERN_CVAR(Float, r_flashlight_outerangle)
 
 CVAR(Bool, m_simpleoptions, false, CVAR_ARCHIVE|CVAR_GLOBALCONFIG);
 CVAR(Bool, m_simpleoptions_view, true, 0);
@@ -595,6 +599,12 @@ CCMD (togglemessages)
 	}
 }
 
+CCMD (toggleflashlight)
+{
+	r_flashlight = !r_flashlight;
+	Printf("Flashlight %s\n", r_flashlight ? "ON" : "OFF");
+}
+
 EXTERN_CVAR (Int, screenblocks)
 
 CCMD (sizedown)
@@ -645,6 +655,10 @@ CCMD(acc_reset2defaults)
 	m_tooltip_small->ResetToDefault();
 	r_extralight->ResetToDefault();
 	r_visibility->ResetToDefault();
+	r_flashlight->ResetToDefault();
+	r_flashlight_intensity->ResetToDefault();
+	r_flashlight_innerangle->ResetToDefault();
+	r_flashlight_outerangle->ResetToDefault();
 }
 
 CCMD(reset2defaults)

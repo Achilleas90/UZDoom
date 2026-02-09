@@ -2504,8 +2504,16 @@ OptionMenu ModReplayerOptions protected
 	StaticText "$ACCMNU_LIGHT"
 	Slider "$ACCMNU_LIGHT_EXTRA", "r_extralight", -64, 128, 1, 0, "m_showadvanced", 0, Hide
 	Tooltip "$ACCMNU_TOOLTIP_LIGHT_EXTRA"
-	Slider "$ACCMNU_LIGHT_RADIUS", "r_visibility", 0.0, 16.0, 1.0, 1, "m_showadvanced", 0, Hide
-	Tooltip "$ACCMNU_TOOLTIP_LIGHT_RADIUS"
+	Option "Directional Flashlight", "r_flashlight", "OnOff"
+	Tooltip "Projects a focused beam from the player view direction. Bind/use: toggleflashlight."
+	Slider "Flashlight Intensity", "r_flashlight_intensity", 32, 512, 16, 0
+	Tooltip "Controls flashlight reach and brightness."
+	Slider "Flashlight Inner Angle", "r_flashlight_innerangle", 5.0, 35.0, 1.0, 0, "m_showadvanced", 0, Hide
+	Tooltip "Inner cone angle with full brightness."
+	Slider "Flashlight Outer Angle", "r_flashlight_outerangle", 10.0, 60.0, 1.0, 0, "m_showadvanced", 0, Hide
+	Tooltip "Outer cone angle where light fades out."
+	ColorPicker "Flashlight Color", "r_flashlight_color", "m_showadvanced", 0, Hide
+	Tooltip "Beam tint for the directional flashlight."
 
 	StaticText ""
 	SafeCommand "$ACCMNU_RESET", "acc_reset2defaults"

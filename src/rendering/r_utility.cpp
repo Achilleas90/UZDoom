@@ -347,6 +347,40 @@ CUSTOM_CVAR(Int, r_extralight, 0, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
 		self = 128;
 }
 
+//==========================================================================
+//
+// Accessibility flashlight settings.
+//
+//==========================================================================
+
+CVAR(Bool, r_flashlight, false, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
+
+CUSTOM_CVAR(Int, r_flashlight_intensity, 224, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
+{
+	if (self < 32)
+		self = 32;
+	else if (self > 512)
+		self = 512;
+}
+
+CUSTOM_CVAR(Float, r_flashlight_innerangle, 14.f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
+{
+	if (self < 5.f)
+		self = 5.f;
+	else if (self > 35.f)
+		self = 35.f;
+}
+
+CUSTOM_CVAR(Float, r_flashlight_outerangle, 26.f, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
+{
+	if (self < 10.f)
+		self = 10.f;
+	else if (self > 60.f)
+		self = 60.f;
+}
+
+CVAR(Color, r_flashlight_color, 0xFFF6CC, CVAR_ARCHIVE | CVAR_GLOBALCONFIG)
+
 CCMD (bumplight)
 {
 	int step = 16;

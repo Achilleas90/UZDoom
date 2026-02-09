@@ -76,6 +76,14 @@ class PlayerPawn : Actor
 	double		FullHeight;
 	double		curBob;
 	double		prevBob;
+	private CVar mFlashlightEnabledCVar;
+	private CVar mFlashlightIntensityCVar;
+	private CVar mFlashlightInnerAngleCVar;
+	private CVar mFlashlightOuterAngleCVar;
+	private CVar mFlashlightColorCVar;
+	private CVar mDynamicLightsCVarSW;
+	private CVar mDynamicLightsCVarHW;
+	private bool mFlashlightFallbackExtra;
 
 	meta Name HealingRadiusType;
 	meta Name InvulMode;
@@ -192,7 +200,100 @@ class PlayerPawn : Actor
 				player.PendingWeapon = player.PendingWeapon.SisterWeapon;
 			}
 		}
+
+		UpdateAccessibilityFlashlight();
 		Super.Tick();
+	}
+
+	private void EnsureFlashlightCVars()
+	{
+		if (mFlashlightEnabledCVar == null)
+		{
+			mFlashlightEnabledCVar = CVar.GetCVar('r_flashlight');
+			mFlashlightIntensityCVar = CVar.GetCVar('r_flashlight_intensity');
+			mFlashlightInnerAngleCVar = CVar.GetCVar('r_flashlight_innerangle');
+			mFlashlightOuterAngleCVar = CVar.GetCVar('r_flashlight_outerangle');
+			mFlashlightColorCVar = CVar.GetCVar('r_flashlight_color');
+			mDynamicLightsCVarSW = CVar.GetCVar('r_dynlights');
+			mDynamicLightsCVarHW = CVar.GetCVar('gl_lights');
+		}
+	}
+
+	private void DisableAccessibilityFlashlight()
+	{
+		A_RemoveLight('acc_flashlight');
+
+		if (player != null && mFlashlightFallbackExtra && player.extralight == 2)
+		{
+			player.extralight = 0;
+		}
+		mFlashlightFallbackExtra = false;
+	}
+
+	private void UpdateAccessibilityFlashlight()
+	{
+		if (player == null || player.mo != self || health <= 0 || player.playerstate == PST_DEAD)
+		{
+			DisableAccessibilityFlashlight();
+			return;
+		}
+
+		EnsureFlashlightCVars();
+		if (mFlashlightEnabledCVar == null || !mFlashlightEnabledCVar.GetBool())
+		{
+			DisableAccessibilityFlashlight();
+			return;
+		}
+
+		bool dynamicLightsEnabled =
+			(mDynamicLightsCVarSW != null && mDynamicLightsCVarSW.GetBool()) ||
+			(mDynamicLightsCVarHW != null && mDynamicLightsCVarHW.GetBool());
+
+		if (!dynamicLightsEnabled)
+		{
+			A_RemoveLight('acc_flashlight');
+			if (player.extralight < 2) player.extralight = 2;
+			mFlashlightFallbackExtra = true;
+			return;
+		}
+
+		if (mFlashlightFallbackExtra && player.extralight == 2)
+		{
+			player.extralight = 0;
+		}
+		mFlashlightFallbackExtra = false;
+
+		int radius = 224;
+		if (mFlashlightIntensityCVar != null)
+		{
+			radius = clamp(mFlashlightIntensityCVar.GetInt(), 32, 512);
+		}
+
+		double innerAngle = 14.0;
+		if (mFlashlightInnerAngleCVar != null)
+		{
+			innerAngle = clamp(mFlashlightInnerAngleCVar.GetFloat(), 5.0, 35.0);
+		}
+
+		double outerAngle = 26.0;
+		if (mFlashlightOuterAngleCVar != null)
+		{
+			outerAngle = clamp(mFlashlightOuterAngleCVar.GetFloat(), 10.0, 60.0);
+		}
+		if (outerAngle <= innerAngle) outerAngle = innerAngle + 1.0;
+
+		color flashlightColor = Color(0xFFF6CC);
+		if (mFlashlightColorCVar != null)
+		{
+			flashlightColor = Color(mFlashlightColorCVar.GetInt());
+		}
+
+		double zofs = player.viewheight - 6.0;
+		if (zofs < 10.0) zofs = 10.0;
+
+		// Use a spot + attenuated dynamic light attached to the player, with
+		// pitch tracking enabled via an out-of-range explicit pitch argument.
+		A_AttachLight('acc_flashlight', 0, flashlightColor, radius, radius, 88, (8.0, 0.0, zofs), 0.0, innerAngle, outerAngle, 999.0, 1.0);
 	}
 
 	//===========================================================================
