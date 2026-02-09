@@ -149,6 +149,11 @@ void LauncherWindow::UpdateLanguage()
 
 void LauncherWindow::CaptureInfoFromPages()
 {
+	// Some page callbacks can fire during page construction. In that phase
+	// not all page pointers are valid yet, so skip sync until initialization is complete.
+	if (!Info || !PlayGame || !Settings || !Network)
+		return;
+
 	Info->bNetStart = IsInMultiplayer();
 	if (QuickSetup)
 	{
@@ -163,6 +168,9 @@ void LauncherWindow::CaptureInfoFromPages()
 
 void LauncherWindow::ApplyInfoToPages()
 {
+	if (!Info || !PlayGame || !Settings || !Network)
+		return;
+
 	PlayGame->ApplyValues(*Info);
 	Settings->ApplyValues(*Info);
 	Network->ApplyValues(*Info);
