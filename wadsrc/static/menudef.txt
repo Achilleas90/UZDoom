@@ -1791,49 +1791,94 @@ OptionMenu GameplayOptions protected
 	Position -35
 	Title 	"$GMPLYMNU_TITLE"
 	StaticText " "
-	//Indent 222
+	Submenu "Core Rules", "GameplayCoreOptions"
+	Submenu "Multiplayer Rules", "GameplayMultiplayerOptions"
+	Submenu "Advanced Rules", "GameplayAdvancedOptions"
 	Submenu "$OPTMNU_COMPATIBILITY",	"CompatibilityOptions"
-	Submenu "$GMPLYMNU_DEATHMATCH",				"DeathmatchOptions"
-	Submenu "$GMPLYMNU_COOPERATIVE",			"CoopOptions"
+	Class "GameplayMenu"
+}
+
+OptionMenu GameplayCoreOptions protected
+{
+	Position -35
+	Title "$GMPLYMNU_TITLE"
 	StaticText " "
-	Option "$GMPLYMNU_TEAMPLAY",				"teamplay",	"OnOff"
-	Slider	"$GMPLYMNU_TEAMDAMAGE",				"teamdamage", 0, 1, 0.05,2, "m_showadvanced", 0, Hide
-	StaticText " "
-	Option "$GMPLYMNU_SMARTAUTOAIM",			"sv_smartaim", "SmartAim"
-	Tooltip "$OPTMNU_TOOLTIP_SMART_AUTOAIM"
+	Submenu "Multiplayer Rules", "GameplayMultiplayerOptions"
+	Submenu "Advanced Rules", "GameplayAdvancedOptions"
+	Submenu "$OPTMNU_COMPATIBILITY", "CompatibilityOptions"
 	StaticText " "
 	Option "$GMPLYMNU_PISTOLSTART",				"sv_pistolstart", "YesNo"
 	Tooltip "$OPTMNU_TOOLTIP_PISTOLSTART"
-	Option "$GMPLYMNU_FALLINGDAMAGE",			"sv_fallingdamage", "FallingDM"
-	Option "$GMPLYMNU_DROPWEAPON",				"sv_weapondrop", "YesNo", "m_showadvanced", 0, 0, Hide
-	Option "$GMPLYMNU_DOUBLEAMMO",				"sv_doubleammo", "YesNo", "m_showadvanced", 0, 0, Hide
-	Option "$GMPLYMNU_INFINITEAMMO",			"sv_infiniteammo", "YesNo", "m_showadvanced", 0, 0, Hide
-	Option "$GMPLYMNU_INFINITEINVENTORY",		"sv_infiniteinventory", "YesNo", "m_showadvanced", 0, 0, Hide
 	Option "$GMPLYMNU_NOMONSTERS",				"sv_nomonsters", "YesNo"
+	Tooltip "Disable all monster spawns for this session."
 	Option "$GMPLYMNU_NOMONSTERSTOEXIT",		"sv_killallmonsters", "YesNo"
-	Option "$GMPLYMNU_MONSTERSRESPAWN",			"sv_monsterrespawn", "YesNo", "m_showadvanced", 0, 0, Hide
-	Option "$GMPLYMNU_NORESPAWN",				"sv_norespawn", "YesNo", "m_showadvanced", 0, 0, Hide
-	Option "$GMPLYMNU_ITEMSRESPAWN",			"sv_itemrespawn", "YesNo", "m_showadvanced", 0, 0, Hide
-	Option "$GMPLYMNU_SUPERRESPAWN",			"sv_respawnsuper", "YesNo", "m_showadvanced", 0, 0, Hide
+	Tooltip "Maps can finish without killing every monster."
 	Option "$GMPLYMNU_FASTMONSTERS",			"sv_fastmonsters", "YesNo"
-	Option "$GMPLYMNU_INSTANTREACTION",			"sv_instantreaction", "YesNo", "m_showadvanced", 0, 0, Hide
-	Option "$GMPLYMNU_DEGENERATION",			"sv_degeneration", "YesNo", "m_showadvanced", 0, 0, Hide
-	Option "$GMPLYMNU_NOAUTOAIM",				"sv_noautoaim", "NoYes"
-	Option "$GMPLYMNU_NOVERTSPREAD",			"sv_novertspread", "NoYes", "m_showadvanced", 0, 0, Hide
-	Option "$GMPLYMNU_ALLOWSUICIDE",			"sv_disallowsuicide", "NoYes"
+	Tooltip "Makes monsters react and attack more quickly."
+	Option "$GMPLYMNU_FALLINGDAMAGE",			"sv_fallingdamage", "FallingDM"
+	Tooltip "Choose how fall damage is calculated."
+	StaticText " "
 	Option "$GMPLYMNU_ALLOWJUMP",				"sv_jump", "JumpCrouchFreeLook"
 	Option "$GMPLYMNU_ALLOWCROUCH",				"sv_crouch", "JumpCrouchFreeLook"
 	Option "$GMPLYMNU_ALLOWFREELOOK",			"sv_freelook", "JumpCrouchFreeLook"
-	Option "$GMPLYMNU_ALLOWFOV",				"sv_nofov", "NoYes", "m_showadvanced", 0, 0, Hide
-	Option "$GMPLYMNU_BFGFREEAIM",				"sv_nobfgaim", "NoYes", "m_showadvanced", 0, 0, Hide
-	Option "$GMPLYMNU_ALLOWAUTOMAP",			"sv_noautomap", "NoYes", "m_showadvanced", 0, 0, Hide
-	Option "$GMPLYMNU_AUTOMAPALLIES",			"sv_noautomapallies", "NoYes", "m_showadvanced", 0, 0, Hide
-	Option "$GMPLYMNU_ALLOWSPYING",				"sv_disallowspying", "NoYes", "m_showadvanced", 0, 0, Hide
-	Option "$GMPLYMNU_CHASECAM",				"sv_chasecam", "YesNo", "m_showadvanced", 0, 0, Hide
-	Option "$GMPLYMNU_DONTCHECKAMMO",			"sv_dontcheckammo", "NoYes", "m_showadvanced", 0, 0, Hide
-	Option "$GMPLYMNU_KILLBOSSSPAWNS",			"sv_killbossmonst", "YesNo", "m_showadvanced", 0, 0, Hide
-	Option "$GMPLYMNU_NOCOUNTENDMONSTER",		"sv_nocountendmonst", "NoYes", "m_showadvanced", 0, 0, Hide
-	Option "$GMPLYMNU_ALWAYSSPAWNMULTI",		"sv_alwaysspawnmulti", "YesNo", "m_showadvanced", 0, 0, Hide
+	Option "$GMPLYMNU_ALLOWSUICIDE",			"sv_disallowsuicide", "NoYes"
+	Tooltip "Allow players to use kill command to respawn."
+	StaticText " "
+	Option "$GMPLYMNU_NOAUTOAIM",				"sv_noautoaim", "NoYes"
+	Tooltip "Disable classic vertical autoaim assistance."
+	Option "$GMPLYMNU_SMARTAUTOAIM",			"sv_smartaim", "SmartAim"
+	Tooltip "$OPTMNU_TOOLTIP_SMART_AUTOAIM"
+	Class "GameplayMenu"
+}
+
+OptionMenu GameplayMultiplayerOptions protected
+{
+	Position -35
+	Title "$GMPLYMNU_TITLE"
+	StaticText " "
+	Option "$GMPLYMNU_TEAMPLAY",				"teamplay",	"OnOff"
+	Tooltip "Enable team-based game flow where applicable."
+	Slider	"$GMPLYMNU_TEAMDAMAGE",				"teamdamage", 0, 1, 0.05, 2
+	Tooltip "Controls how much damage teammates can deal to each other."
+	StaticText " "
+	Submenu "$GMPLYMNU_DEATHMATCH",				"DeathmatchOptions"
+	Submenu "$GMPLYMNU_COOPERATIVE",			"CoopOptions"
+	Class "GameplayMenu"
+}
+
+OptionMenu GameplayAdvancedOptions protected
+{
+	Position -35
+	Title "$GMPLYMNU_TITLE"
+	StaticText " "
+	Option "$GMPLYMNU_DROPWEAPON",				"sv_weapondrop", "YesNo"
+	Option "$GMPLYMNU_DOUBLEAMMO",				"sv_doubleammo", "YesNo"
+	Option "$GMPLYMNU_INFINITEAMMO",			"sv_infiniteammo", "YesNo"
+	Option "$GMPLYMNU_INFINITEINVENTORY",		"sv_infiniteinventory", "YesNo"
+	Option "$GMPLYMNU_MONSTERSRESPAWN",			"sv_monsterrespawn", "YesNo"
+	Option "$GMPLYMNU_NORESPAWN",				"sv_norespawn", "YesNo"
+	Option "$GMPLYMNU_ITEMSRESPAWN",			"sv_itemrespawn", "YesNo"
+	Option "$GMPLYMNU_SUPERRESPAWN",			"sv_respawnsuper", "YesNo"
+	Option "$GMPLYMNU_INSTANTREACTION",			"sv_instantreaction", "YesNo"
+	Tooltip "Monsters react instantly when they detect players."
+	Option "$GMPLYMNU_DEGENERATION",			"sv_degeneration", "YesNo"
+	Tooltip "Health slowly decays over time."
+	Option "$GMPLYMNU_NOVERTSPREAD",			"sv_novertspread", "NoYes"
+	Tooltip "Disable vertical random spread for bullet weapons."
+	Option "$GMPLYMNU_ALLOWFOV",				"sv_nofov", "NoYes"
+	Option "$GMPLYMNU_BFGFREEAIM",				"sv_nobfgaim", "NoYes"
+	Option "$GMPLYMNU_ALLOWAUTOMAP",			"sv_noautomap", "NoYes"
+	Option "$GMPLYMNU_AUTOMAPALLIES",			"sv_noautomapallies", "NoYes"
+	Option "$GMPLYMNU_ALLOWSPYING",				"sv_disallowspying", "NoYes"
+	Option "$GMPLYMNU_CHASECAM",				"sv_chasecam", "YesNo"
+	Option "$GMPLYMNU_DONTCHECKAMMO",			"sv_dontcheckammo", "NoYes"
+	Tooltip "Allow weapon switching even when ammo appears empty."
+	Option "$GMPLYMNU_KILLBOSSSPAWNS",			"sv_killbossmonst", "YesNo"
+	Tooltip "Disable map events triggered only by boss monster deaths."
+	Option "$GMPLYMNU_NOCOUNTENDMONSTER",		"sv_nocountendmonst", "NoYes"
+	Tooltip "Exclude end-level monsters from kill-count checks."
+	Option "$GMPLYMNU_ALWAYSSPAWNMULTI",		"sv_alwaysspawnmulti", "YesNo"
+	Tooltip "Always spawn multiplayer-only actors regardless of mode."
 	Class "GameplayMenu"
 }
 

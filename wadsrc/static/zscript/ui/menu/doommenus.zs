@@ -76,7 +76,7 @@ class OptionsHubMenu : OptionMenu
 		mCategoryLabels.Push("$OPTMNU_CONTROLS");
 		mCategoryMenus.Push('NewPlayerMenu');
 		mCategoryLabels.Push("$OPTMNU_PLAYER");
-		mCategoryMenus.Push('GameplayOptions');
+		mCategoryMenus.Push('GameplayCoreOptions');
 		mCategoryLabels.Push("$OPTMNU_GAMEPLAY");
 		mCategoryMenus.Push('HUDOptions');
 		mCategoryLabels.Push("$OPTMNU_HUD");
