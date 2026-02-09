@@ -105,13 +105,13 @@ msgid "OPTMNU_CONTROLS"
 msgstr "Προσαρμογή χειριστηρίων"
 
 msgid "OPTMNU_MOUSE"
-msgstr "Ρυθμίσεις ποντικίου"
+msgstr "Ρυθμίσεις ποντικιού"
 
 msgid "OPTMNU_JOYSTICK"
 msgstr "Επιλογές ελεγκτή"
 
 msgid "OPTMNU_PLAYER"
-msgstr "Ρυθμίσεις παίχτη"
+msgstr "Ρυθμίσεις παίκτη"
 
 msgid "OPTMNU_GAMEPLAY"
 msgstr "Επιλογές παιχνιδιού"
@@ -549,7 +549,7 @@ msgid "OPTVAL_NOTINVERTED"
 msgstr "Όχι ανεστραμμένο"
 
 msgid "TXT_COLOR_BLUE"
-msgstr "Μπλέ"
+msgstr "Μπλε"
 
 msgid "TXT_COLOR_RED"
 msgstr "Κόκκινο"
@@ -558,10 +558,10 @@ msgid "TXT_COLOR_GREEN"
 msgstr "Πράσινο"
 
 msgid "TXT_COLOR_GRAY"
-msgstr "Γκρί"
+msgstr "Γκρι"
 
 msgid "TXT_COLOR_DARKGRAY"
-msgstr "Σκοτεινό γρκί"
+msgstr "Σκούρο γκρι"
 
 msgid "TXT_COLOR_DARKGREEN"
 msgstr "Σκοτεινό πράσινο"
@@ -570,7 +570,7 @@ msgid "TXT_COLOR_BROWN"
 msgstr "Σκούρο"
 
 msgid "TXT_COLOR_DARKBLUE"
-msgstr "Σκοτεινό μπλέ"
+msgstr "Σκούρο μπλε"
 
 msgid "TXT_COLOR_LIGHTRED"
 msgstr "Ανοιχτό κόκκινο"
@@ -603,7 +603,7 @@ msgid "TXT_COLOR_GOLD"
 msgstr "Χρυσό"
 
 msgid "TXT_COLOR_BRIGHTGREEN"
-msgstr "Φωτινό Πράσινο"
+msgstr "Φωτεινό πράσινο"
 
 msgid "TXT_COLOR_RUST"
 msgstr "Σκουριά"
@@ -672,7 +672,7 @@ msgid "MSGMNU_PULSEMESSAGES"
 msgstr "Εμφάνιση παλλόμενου μηνύματος"
 
 msgid "MSGMNU_MESSAGESCALE"
-msgstr "Μέγεθος μηνύματον"
+msgstr "Μέγεθος μηνυμάτων"
 
 msgid "MNU_COLORPICKER"
 msgstr "Επιλογή Χρώματος"
@@ -681,7 +681,7 @@ msgid "AUTOMAPMNU_ROTATE"
 msgstr "Περιστροφή αυτόματου χάρτη"
 
 msgid "AUTOMAPMNU_FOLLOW"
-msgstr "Ακουλούθα το παίχτη"
+msgstr "Ακολούθησε τον παίκτη"
 
 msgid "AUTOMAPMNU_LINEALPHA"
 msgstr "Γραμμή άλφα"
@@ -744,10 +744,10 @@ msgid "OPTVAL_4096SAMPLES"
 msgstr "4096 δείγματα"
 
 msgid "OPTSTR_AUTO"
-msgstr "Αυτο"
+msgstr "Αυτό"
 
 msgid "OPTSTR_MONO"
-msgstr "Μονο"
+msgstr "Μόνο"
 
 msgid "OPTSTR_STEREO"
 msgstr "Στέρεο"
@@ -1154,7 +1154,7 @@ msgid "ADLVLMODEL_HMIOLD"
 msgstr "HMI SOS (Παλιό, με σφάλματα)"
 
 msgid "ADLCHANALLOC_AUTO"
-msgstr "Αυτο"
+msgstr "Αυτόματο"
 
 msgid "ADLCHANALLOC_OFFDELAY"
 msgstr "Μετρήθηκε η καθυστέρηση ήχου"
@@ -1518,7 +1518,7 @@ msgid "OPTVAL_YES_STANDARD"
 msgstr "Πρότυπο"
 
 msgid "OPTVAL_YES_ENHANCED"
-msgstr "Ενισχυομένο"
+msgstr "Ενισχυμένο"
 
 msgid "OPTMNU_LANGUAGE"
 msgstr "Γλώσσα"
@@ -1530,7 +1530,7 @@ msgid "REVMNU_SELECT"
 msgstr "Επιλογή Περιβάλλοντος"
 
 msgid "REVMNU_TEST"
-msgstr "Δοκιμαστκό Περιβάλλον"
+msgstr "Δοκιμαστικό Περιβάλλον"
 
 msgid "REVMNU_EDIT"
 msgstr "Επεξεργασία Περιβάλλοντος"
@@ -1716,19 +1716,19 @@ msgid "OPTVAL_NXBRZ"
 msgstr "xBRZ"
 
 msgid "OPTVAL_OLD_NXBRZ"
-msgstr "Παλίο xBRZ"
+msgstr "Παλιό xBRZ"
 
 msgid "OS_TITLE"
 msgstr "Αναζήτηση Ρυθμίσεων"
 
 msgid "OS_ANY"
-msgstr "Αναζήτηση για όποιαδηποτε λέξη"
+msgstr "Αναζήτηση για οποιαδήποτε λέξη"
 
 msgid "OS_ALL"
-msgstr "Αναζήτηση για όλες της λέξεις"
+msgstr "Αναζήτηση για όλες τις λέξεις"
 
 msgid "OS_NO_RESULTS"
-msgstr "Δέν βρέθηκαν αποτελέσματα"
+msgstr "Δεν βρέθηκαν αποτελέσματα"
 
 msgid "OS_LABEL"
 msgstr "Αναζήτηση:"
@@ -1746,7 +1746,7 @@ msgid "TXT_OBITUARY4"
 msgstr "Ο/Η %k αποδεκάτισε @[pro2_gr] %o"
 
 msgid "TXT_OBITUARY5"
-msgstr "Ο/Η %k κατέστεψε @[pro2_gr] %o"
+msgstr "Ο/Η %k κατέστρεψε @[pro2_gr] %o"
 
 msgid "TXT_OBITUARY6"
 msgstr "Ο/Η %k τεμάχησε @[pro2_gr] %o"
@@ -1755,7 +1755,7 @@ msgid "TXT_OBITUARY7"
 msgstr "Ο/Η %k ισοπέδοσε @[pro2_gr] %o"
 
 msgid "TXT_OBITUARY8"
-msgstr "Ο/Η %k ησοπέδοσε @[pro2_gr] %o"
+msgstr "Ο/Η %k ισοπέδωσε @[pro2_gr] %o"
 
 msgid "TXT_OBITUARY9"
 msgstr "Ο/Η %k γάμησε @[pro2_gr] %o @[pro3_gr] κόλο"
@@ -1773,7 +1773,7 @@ msgid "TXT_OBITUARY13"
 msgstr "Ο/Η %k δολοφώνησε @[pro2_gr] %o"
 
 msgid "TXT_OBITUARY14"
-msgstr "Ο/Η %k ακρωτηριάσε @[pro2_gr] %o"
+msgstr "Ο/Η %k ακρωτηρίασε @[pro2_gr] %o"
 
 msgid "TXT_OBITUARY15"
 msgstr "Ο/Η %k δέσμισε @[pro2_gr] %o"
@@ -1815,7 +1815,7 @@ msgid "TXT_OBITUARY27"
 msgstr "Ο/Η %k έσβησε @[pro2_gr] %o"
 
 msgid "TXT_OBITUARY28"
-msgstr "Ο/Η %k έονιξε @[pro2_gr] %o σε σφαίρες"
+msgstr "Ο/Η %k έπνιξε @[pro2_gr] %o σε σφαίρες"
 
 msgid "TXT_OBITUARY29"
 msgstr "Ο/Η %k ψέκασε @[pro2_gr] %o"
@@ -1833,13 +1833,13 @@ msgid "TXT_SELFOBIT2"
 msgstr "@[art_gr] %o είναι χάμπουργκερ"
 
 msgid "TXT_SELFOBIT3"
-msgstr "Οι όρχις @[pro4_gr] %o βγήκανε"
+msgstr "Οι όρχεις @[pro4_gr] %o βγήκαν"
 
 msgid "TXT_SELFOBIT4"
-msgstr "@[art_gr] %o εθελώντησε για έλεγχο του πληθυσμού"
+msgstr "@[art_gr] %o έγινε εθελοντής για έλεγχο του πληθυσμού"
 
 msgid "TXT_SELFOBIT5"
-msgstr "@[art_gr] %o έχει αυτοκτονήση"
+msgstr "@[art_gr] %o έχει αυτοκτονήσει"
 
 msgid "TXT_SELFOBIT6"
 msgstr "@[art_gr] %o κέρδισε το Darwin βραβείο"
@@ -1857,10 +1857,10 @@ msgid "REQUIRED_CHARACTERS"
 msgstr "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ"
 
 msgid "OPTMNU_FULLOPTIONS"
-msgstr "Πλήρες μενού ρυθμίσεον"
+msgstr "Πλήρες μενού ρυθμίσεων"
 
 msgid "OPTMNU_SIMPLEON"
-msgstr "Απλό μενού ρυθμίσεον"
+msgstr "Απλό μενού ρυθμίσεων"
 
 msgid "OPTMNU_OPENCONFIG"
 msgstr "Περιήγηση στο Game Config"
@@ -1878,7 +1878,7 @@ msgid "OPTVAL_ONLYMODIFIED"
 msgstr "Μόνο τροποποιημένο"
 
 msgid "TXT_UNKNOWN"
-msgstr "Άχνωστο"
+msgstr "Άγνωστο"
 
 msgid "OPTVAL_HUD"
 msgstr "HUD"
@@ -1890,7 +1890,7 @@ msgid "OPTVAL_HUDANDMAP"
 msgstr "HUD + Αυτόματος χάρτης"
 
 msgid "TXT_SAVEGAMENEEDS"
-msgstr "Το αρχείο αποθήκευσης χριάζετε αυτά τα αρχεία"
+msgstr "Το αρχείο αποθήκευσης χρειάζεται αυτά τα αρχεία"
 
 msgid "OPTMNU_MULTIPLAYER"
 msgstr "Επιλογές για πολλούς παίκτες"
